@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Domilis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Domilis gestisce il tuo affitto di medio e lungo periodo: canone accreditato ogni mese, tutela legale e danni inclusi, al 10% del canone.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<style>
+/* Layout: colonna unica larga 1120px; l'eroe affianca la promessa a un estratto conto dei canoni,
+   che è l'unico elemento "oggetto" della pagina. Il gradiente del marchio compare solo su logo e azioni principali. */
+:root {
+  --bg: #fbfbfe;
+  --surface: #ffffff;
+  --tint: #f1f2fb;
+  --ink: #0f0b4a;
+  --muted: #5b5a7d;
+  --line: #dfe0ef;
+  --blue: #1296f0;
+  --violet: #7a3cf0;
+  --accent: #4a45e0;
+  --on-accent: #ffffff;
+  --good: #0c7a55;
+  --good-bg: #e2f5ec;
+  --warn: #8a5a00;
+  --warn-bg: #fdf0d2;
+  --shadow: 0 24px 60px -28px rgba(15, 11, 74, .35);
+  --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0a26; --surface: #15143a; --tint: #121130; --ink: #f1f1fb; --muted: #a9a8c9;
+    --line: #2b2a57; --blue: #4db4ff; --violet: #a57bff; --accent: #8f8bff; --on-accent: #0b0a26;
+    --good: #5fd6a6; --good-bg: #113a2e; --warn: #f2c666; --warn-bg: #3d2f0c;
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0a26; --surface: #15143a; --tint: #121130; --ink: #f1f1fb; --muted: #a9a8c9;
+  --line: #2b2a57; --blue: #4db4ff; --violet: #a57bff; --accent: #8f8bff; --on-accent: #0b0a26;
+  --good: #5fd6a6; --good-bg: #113a2e; --warn: #f2c666; --warn-bg: #3d2f0c;
+  --shadow: 0 24px 60px -28px rgba(0, 0, 0, .7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; }
+h1 { font-size: clamp(2.1rem, 5.4vw, 3.6rem); font-weight: 800; }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; }
+h3 { font-size: 1.12rem; font-weight: 700; letter-spacing: -.01em; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { max-width: 1120px; margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: clamp(56px, 8vw, 104px); }
+.band.tinted { background: var(--tint); }
+.eyebrow { font: 600 .78rem/1.3 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.lead { color: var(--muted); font-size: 1.1rem; max-width: 60ch; }
+.head { display: grid; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); }
+
+/* Intestazione */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 18px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.5rem/1 var(--display); letter-spacing: -.03em; }
+.brand svg { width: 34px; height: 34px; flex: none; }
+.nav { display: flex; align-items: center; gap: 26px; font-weight: 500; font-size: .95rem; }
+.nav a { text-decoration: none; color: var(--muted); }
+.nav a:hover { color: var(--ink); }
+@media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1.5px solid transparent; font: 600 1rem/1 var(--body); text-decoration: none; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+.btn.primary { background: linear-gradient(100deg, var(--blue), var(--violet)); color: #fff; box-shadow: 0 10px 24px -12px var(--violet); }
+.btn.ghost { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.btn.small { min-height: 40px; padding: 0 16px; font-size: .92rem; }
+.nav a.btn { color: #fff; }
+.btn:hover { transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+
+/* Eroe */
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 72px); align-items: center; padding-block: clamp(32px, 6vw, 80px) clamp(56px, 8vw, 104px); }
+.hero-copy { display: grid; gap: 22px; }
+.hero h1 em { font-style: normal; background: linear-gradient(100deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.fine { color: var(--muted); font-size: .88rem; }
+@media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+
+/* Estratto canoni */
+.ledger { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 22px; min-width: 0; }
+.ledger-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.ledger-top strong { font: 700 1rem/1.3 var(--display); }
+.ledger-top span { color: var(--muted); font-size: .82rem; }
+.ledger li { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: .93rem; }
+.ledger .m { font-weight: 600; }
+.ledger .amt { font-weight: 600; font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--good-bg); color: var(--good); }
+.pill.cover { background: var(--warn-bg); color: var(--warn); }
+.ledger-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 14px; }
+.ledger-foot span { color: var(--muted); font-size: .88rem; }
+.ledger-foot strong { font: 800 1.5rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.ledger-note { margin-top: 12px; color: var(--muted); font-size: .8rem; }
+
+/* Griglie */
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(24px, 3vw, 40px); }
+.item { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.item p { color: var(--muted); }
+.item svg { width: 28px; height: 28px; color: var(--accent); }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+@media (max-width: 860px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+.included { margin-top: clamp(36px, 5vw, 56px); padding-top: 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 28px; }
+.included ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px 24px; }
+.included li { padding-left: 26px; position: relative; }
+.included li::before { content: ""; position: absolute; left: 0; top: .5em; width: 14px; height: 8px; border-left: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent); transform: rotate(-45deg); }
+.price { font: 800 clamp(2.6rem, 6vw, 3.6rem)/1 var(--display); letter-spacing: -.03em; }
+.price small { display: block; margin-top: 8px; font: 500 1rem/1.4 var(--body); letter-spacing: 0; color: var(--muted); }
+@media (max-width: 760px) { .included { grid-template-columns: minmax(0, 1fr); } }
+
+/* Calcolatore */
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: clamp(20px, 3vw, 32px); display: grid; gap: 22px; min-width: 0; }
+.calc label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+.calc output { font: 800 1.6rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.calc input[type=range] { width: 100%; accent-color: var(--accent); height: 28px; }
+.calc dl { display: grid; gap: 0; }
+.calc dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.calc dt { color: var(--muted); }
+.calc dd { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.calc dl div.total dd { font: 800 1.35rem/1.2 var(--display); color: var(--accent); }
+.calc .compare { background: var(--tint); border-radius: 12px; padding: 14px 16px; font-size: .93rem; color: var(--muted); }
+.calc .compare strong { color: var(--ink); }
+
+/* Passi */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(24px, 3vw, 36px); counter-reset: s; }
+.steps li { display: grid; gap: 10px; align-content: start; counter-increment: s; padding-top: 18px; border-top: 2px solid var(--line); }
+.steps li::before { content: counter(s); font: 800 1rem/1 var(--display); color: var(--accent); }
+.steps p { color: var(--muted); }
+
+/* Domilis+ */
+.plus { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.plus li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.plus p { color: var(--muted); grid-column: 1 / -1; }
+.soon { align-self: center; font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+
+/* Backbone */
+.rails { display: flex; flex-wrap: wrap; gap: 10px; }
+.rails li { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-weight: 500; font-size: .93rem; }
+
+/* FAQ */
+.faq { max-width: 780px; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { cursor: pointer; padding: 18px 32px 18px 0; font: 700 1.05rem/1.35 var(--display); list-style: none; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font: 500 1.5rem/1 var(--body); color: var(--accent); }
+.faq details[open] summary::after { content: "–"; }
+.faq p { color: var(--muted); padding: 0 0 20px; max-width: 65ch; }
+
+/* Lista d'attesa */
+.join { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: clamp(22px, 4vw, 44px); box-shadow: var(--shadow); }
+form { display: grid; gap: 18px; min-width: 0; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--tint); border-radius: 999px; border: 0; margin: 0; }
+.seg label { position: relative; text-align: center; padding: 11px 8px; border-radius: 999px; font-weight: 600; font-size: .95rem; cursor: pointer; color: var(--muted); }
+.seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.seg label:has(input:checked) { background: var(--surface); color: var(--ink); box-shadow: 0 2px 8px -4px rgba(15, 11, 74, .4); }
+.seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field span { font-weight: 600; font-size: .9rem; }
+.field input, .field select { width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); font: 400 1rem var(--body); }
+.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--muted); }
+.consent input { margin-top: 4px; width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+.status { border-radius: 12px; padding: 12px 16px; font-size: .93rem; background: var(--good-bg); color: var(--good); }
+.status.demo { background: var(--warn-bg); color: var(--warn); }
+
+footer { padding-block: 40px 56px; color: var(--muted); font-size: .85rem; display: grid; gap: 16px; }
+footer .brand { font-size: 1.2rem; color: var(--ink); }
+footer p { max-width: 80ch; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="dg" x1="14" y1="100" x2="100" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12b0ff"/><stop offset=".55" stop-color="#3f6cf6"/><stop offset="1" stop-color="#8a3df2"/>
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 120 120">
+      <path d="M94 70V48L60 22 26 48v50h36l32-26" fill="none" stroke="url(#dg)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="wrap top">
+  <a class="brand" href="#" aria-label="Domilis, pagina iniziale"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+  <nav class="nav" aria-label="Sezioni">
+    <a href="#proprietari">Proprietari</a>
+    <a href="#come-funziona">Come funziona</a>
+    <a href="#inquilini">Inquilini</a>
+    <a href="#domande">Domande</a>
+    <a class="btn primary small" href="#lista">Entra in lista</a>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Affitti di medio e lungo periodo · In arrivo a Milano</p>
+      <h1>L'affitto arriva ogni mese. <em>Anche quando l'inquilino non paga.</em></h1>
+      <p class="lead">Pubblichi l'annuncio, al resto pensa Domilis: selezione dell'inquilino, contratto, incasso, tutela legale e danni. Tu paghi il 10% del canone, e solo quando incassi.</p>
+      <div class="actions">
+        <a class="btn primary" href="#lista" data-role="proprietario">Ho una casa da affittare</a>
+        <a class="btn ghost" href="#lista" data-role="inquilino">Cerco casa</a>
+      </div>
+      <p class="fine">Renting made effortless. Nessun costo fisso, nessuna provvigione d'ingresso.</p>
+    </div>
+
+    <aside class="ledger" aria-label="Esempio di estratto dei canoni">
+      <div class="ledger-top">
+        <strong>Estratto canoni · bilocale, 1.200 € al mese</strong>
+        <span>Esempio</span>
+      </div>
+      <ul>
+        <li><span class="m">Gen</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+        <li><span class="m">Feb</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+        <li><span class="m">Mar</span><span><span class="pill cover">Inquilino in ritardo · pagato da Domilis</span></span><span class="amt">1.080 €</span></li>
+        <li><span class="m">Apr</span><span><span class="pill cover">Inquilino in ritardo · pagato da Domilis</span></span><span class="amt">1.080 €</span></li>
+        <li><span class="m">Mag</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+        <li><span class="m">Giu</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+      </ul>
+      <div class="ledger-foot"><span>Incassato in sei mesi</span><strong>6.480 €</strong></div>
+      <p class="ledger-note">Canone 1.200 € meno il 10% di Domilis. Il proprietario non ha fatto nulla a marzo e aprile.</p>
+    </aside>
+  </section>
+
+  <section class="band tinted" id="proprietari">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Per chi affitta</p>
+        <h2>Tre coperture, un solo prezzo</h2>
+        <p class="lead">La paura di non essere pagati tiene vuote molte case. Domilis si prende quel rischio al posto tuo.</p>
+      </div>
+      <div class="grid3">
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8.5 15l2.5 2.5 4.5-4.5"/></svg>
+          <h3>Canone garantito</h3>
+          <p>Accredito ogni mese nello stesso giorno. Se l'inquilino ritarda o smette di pagare, il canone lo versa Domilis.</p>
+        </div>
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 7h14M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7zM19 7l-3 7a3.5 3.5 0 0 0 6 0l-3-7zM8 21h8"/></svg>
+          <h3>Tutela legale</h3>
+          <p>Solleciti, diffide e, se serve, procedura di sfratto: avvocato e spese sono a carico nostro, fino al rilascio dell'immobile.</p>
+        </div>
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9z"/><path d="M12 10l-2 3h4l-2 3"/></svg>
+          <h3>Danni e ripristino</h3>
+          <p>Verbale di consegna con foto all'ingresso e all'uscita. I danni oltre la normale usura vengono riparati senza anticipi da parte tua.</p>
+        </div>
+      </div>
+
+      <div class="included">
+        <p class="price">10%<small>del canone incassato. Nient'altro.</small></p>
+        <ul>
+          <li>Annuncio creato da te in pochi minuti</li>
+          <li>Selezione e verifica dell'inquilino</li>
+          <li>Contratto e registrazione all'Agenzia delle Entrate</li>
+          <li>Incasso e accredito mensile</li>
+          <li>Gestione di guasti e manutenzioni</li>
+          <li>Un referente per tutta la durata</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="calcolo">
+    <div class="wrap split">
+      <div class="head">
+        <p class="eyebrow">Fai il conto</p>
+        <h2>Quanto incassi, mese dopo mese</h2>
+        <p class="lead">Il servizio costa quanto 1,2 mensilità l'anno. Una morosità con sfratto può bruciarne dodici, più le spese legali.</p>
+        <p class="fine">Il calcolo è indicativo e non considera imposte e spese condominiali.</p>
+      </div>
+      <div class="calc">
+        <div>
+          <label for="canone">Canone mensile <output id="canone-out" for="canone">1.200 €</output></label>
+          <input type="range" id="canone" min="500" max="3500" step="50" value="1200">
+        </div>
+        <dl>
+          <div><dt>Costo Domilis al mese (10%)</dt><dd id="c-fee">120 €</dd></div>
+          <div><dt>Ricevi ogni mese</dt><dd id="c-net">1.080 €</dd></div>
+          <div class="total"><dt>Ricevi in un anno, garantito</dt><dd id="c-year">12.960 €</dd></div>
+        </dl>
+        <p class="compare">Senza copertura, <strong>sei mesi di morosità</strong> ti costano <strong id="c-loss">7.200 €</strong> di canoni persi. Con Domilis il costo di un anno intero è <strong id="c-cost">1.440 €</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tinted" id="come-funziona">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Come funziona</p>
+        <h2>Dall'annuncio al primo accredito</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Pubblichi l'annuncio</h3><p>Foto, canone e disponibilità. Verifichiamo l'immobile e l'annuncio va online.</p></li>
+        <li><h3>Selezioniamo l'inquilino</h3><p>Identità, reddito e affidabilità nei pagamenti. Tu scegli tra i candidati approvati.</p></li>
+        <li><h3>Firmate online</h3><p>Contratto con firma digitale e registrazione all'Agenzia delle Entrate inclusa.</p></li>
+        <li><h3>Incassi ogni mese</h3><p>L'inquilino paga con addebito diretto. Tu ricevi l'accredito, in ogni caso.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="inquilini">
+    <div class="wrap split">
+      <div>
+        <div class="head">
+          <p class="eyebrow">Per chi cerca casa</p>
+          <h2>Entri senza tre mensilità di deposito</h2>
+          <p class="lead">La garanzia verso il proprietario la mette Domilis. Tu superi una verifica e paghi il canone, senza commissioni di agenzia.</p>
+        </div>
+        <div class="grid3">
+          <div class="item"><h3>Case verificate</h3><p>Ogni immobile è controllato prima di andare online. Niente annunci fantasma.</p></div>
+          <div class="item"><h3>Tutto digitale</h3><p>Candidatura, firma e pagamenti dal telefono. Un solo referente per i guasti.</p></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:14px">Domilis+ · servizi per la casa, a scelta</h3>
+        <ul class="plus">
+          <li><h3>Pulizie</h3><span class="soon">In arrivo</span><p>Pulizia periodica con lo stesso professionista, addebitata insieme al canone.</p></li>
+          <li><h3>Benessere</h3><span class="soon">In arrivo</span><p>Un abbonamento per palestre e studi della tua zona.</p></li>
+          <li><h3>Utenze e internet</h3><span class="soon">In arrivo</span><p>Volture e attivazioni fatte da noi, pronte il giorno dell'ingresso.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tinted" id="italia">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Fatto per l'Italia</p>
+        <h2>Costruito sulle regole di casa nostra</h2>
+        <p class="lead">Contratti validi, registrati e fiscalmente in ordine, con gli strumenti che usi già.</p>
+      </div>
+      <ul class="rails">
+        <li>Accesso con SPID e CIE</li>
+        <li>Registrazione all'Agenzia delle Entrate</li>
+        <li>Cedolare secca</li>
+        <li>Canone concordato 3+2</li>
+        <li>Contratto 4+4</li>
+        <li>Transitorio e studenti</li>
+        <li>Addebito diretto SEPA</li>
+        <li>Firma digitale</li>
+        <li>Dati conservati in UE</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="domande">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Domande frequenti</p>
+        <h2>Cosa succede se l'inquilino non paga?</h2>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>Chi mi paga se l'inquilino smette di pagare?</summary>
+          <p>Domilis. Continui a ricevere l'accredito mensile mentre noi gestiamo il recupero con l'inquilino e, se necessario, la procedura di sfratto.</p>
+        </details>
+        <details>
+          <summary>Il 10% si paga anche quando la casa è vuota?</summary>
+          <p>No. Il compenso si calcola solo sui canoni che ricevi. Senza contratto attivo non paghi nulla.</p>
+        </details>
+        <details>
+          <summary>Posso scegliere io l'inquilino?</summary>
+          <p>Sì, tra i candidati che hanno superato la verifica di Domilis. La garanzia vale solo per gli inquilini approvati.</p>
+        </details>
+        <details>
+          <summary>Che contratti gestite?</summary>
+          <p>Locazioni abitative da sei mesi in su: 4+4, canone concordato 3+2, transitorio e per studenti. Non gestiamo affitti brevi turistici.</p>
+        </details>
+        <details>
+          <summary>Sono un inquilino: quanto mi costa?</summary>
+          <p>Nessuna commissione. Paghi il canone e, se li vuoi, i servizi Domilis+.</p>
+        </details>
+        <details>
+          <summary>Quando partite?</summary>
+          <p>Il servizio è in preparazione e partirà da Milano. Chi è in lista d'attesa viene contattato per primo.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tinted" id="lista">
+    <div class="wrap split">
+      <div class="head">
+        <p class="eyebrow">Lista d'attesa</p>
+        <h2>Sii tra i primi a Milano</h2>
+        <p class="lead">Lascia i tuoi contatti. Ti scriviamo quando apriamo nella tua zona, senza impegno.</p>
+      </div>
+      <div class="join">
+        <form id="waitlist" novalidate>
+          <fieldset class="seg">
+            <label><input type="radio" name="ruolo" id="ruolo-proprietario" value="proprietario" checked>Ho una casa</label>
+            <label><input type="radio" name="ruolo" id="ruolo-inquilino" value="inquilino">Cerco casa</label>
+          </fieldset>
+          <label class="field"><span>Email</span><input type="email" id="email" name="email" autocomplete="email" placeholder="nome@esempio.it" required></label>
+          <div class="row2">
+            <label class="field"><span>Città</span><input type="text" id="citta" name="citta" value="Milano" required></label>
+            <label class="field" id="immobili-field"><span>Immobili da affittare</span>
+              <select id="immobili" name="immobili"><option>1</option><option>2–3</option><option>4 o più</option></select>
+            </label>
+          </div>
+          <label class="consent"><input type="checkbox" id="privacy" name="privacy" required><span>Acconsento a essere contattato da Domilis su questo servizio.</span></label>
+          <button class="btn primary" type="submit" id="invia">Entra in lista</button>
+          <p class="status" id="esito" role="status" hidden></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <a class="brand" href="#"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+  <p>Domilis è un servizio in fase di lancio. Le coperture descritte saranno prestate tramite un partner assicurativo e valgono per i contratti con inquilini approvati da Domilis, alle condizioni che verranno pubblicate prima dell'attivazione.</p>
+  <p>© 2026 Domilis</p>
+</footer>
+
+<script>
+// Indirizzo a cui inviare le iscrizioni (Formspree, Brevo, Tally o un endpoint proprio). Vuoto = anteprima, nessun invio.
+const FORM_ENDPOINT = "";
+
+const euro = n => n.toLocaleString("it-IT", { maximumFractionDigits: 0, useGrouping: "always" }) + " €";
+const $ = id => document.getElementById(id);
+
+function calcola() {
+  const canone = Number($("canone").value);
+  const fee = canone * 0.1;
+  $("canone-out").textContent = euro(canone);
+  $("c-fee").textContent = euro(fee);
+  $("c-net").textContent = euro(canone - fee);
+  $("c-year").textContent = euro((canone - fee) * 12);
+  $("c-loss").textContent = euro(canone * 6);
+  $("c-cost").textContent = euro(fee * 12);
+}
+$("canone").addEventListener("input", calcola);
+calcola();
+
+function aggiornaRuolo() {
+  const proprietario = $("ruolo-proprietario").checked;
+  $("immobili-field").hidden = !proprietario;
+}
+document.querySelectorAll('input[name="ruolo"]').forEach(r => r.addEventListener("change", aggiornaRuolo));
+document.querySelectorAll("[data-role]").forEach(a => a.addEventListener("click", () => {
+  $("ruolo-" + a.dataset.role).checked = true;
+  aggiornaRuolo();
+}));
+aggiornaRuolo();
+
+$("waitlist").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.currentTarget, esito = $("esito");
+  const mostra = (testo, demo) => { esito.textContent = testo; esito.classList.toggle("demo", !!demo); esito.hidden = false; };
+  if (!$("email").validity.valid) { mostra("Controlla l'indirizzo email: sembra incompleto.", true); $("email").focus(); return; }
+  if (!$("citta").value.trim()) { mostra("Indica la città in cui si trova la casa o in cui la cerchi.", true); $("citta").focus(); return; }
+  if (!$("privacy").checked) { mostra("Serve il tuo consenso per poterti ricontattare.", true); $("privacy").focus(); return; }
+  if (!FORM_ENDPOINT) { mostra("Anteprima: il modulo non è ancora collegato, nessun dato è stato inviato.", true); return; }
+  $("invia").disabled = true;
+  try {
+    const r = await fetch(FORM_ENDPOINT, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
+    if (!r.ok) throw new Error(r.status);
+    form.reset(); aggiornaRuolo();
+    mostra("Sei in lista. Ti scriviamo appena apriamo nella tua zona.");
+  } catch (err) {
+    mostra("Invio non riuscito. Riprova tra qualche minuto.", true);
+  } finally {
+    $("invia").disabled = false;
+  }
+});
+</script>
+</body>
+</html>
