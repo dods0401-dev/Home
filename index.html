@@ -8,233 +8,369 @@
 <meta name="description" content="Domilis gestisce il tuo affitto di medio e lungo periodo: canone accreditato ogni mese, tutela legale e danni inclusi, al 10% del canone.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
 <style>
-/* Layout: colonna unica larga 1120px; l'eroe affianca la promessa a un estratto conto dei canoni,
-   che è l'unico elemento "oggetto" della pagina. Il gradiente del marchio compare solo su logo e azioni principali. */
+/* Layout: colonna da 1160px. L'eroe affianca la promessa all'estratto dei canoni; il prezzo e la lista d'attesa
+   stanno su pannelli blu notte, unici blocchi scuri della pagina. Il gradiente del marchio resta su logo, azioni e cifre chiave. */
 :root {
-  --bg: #fbfbfe;
+  --bg: #fafaff;
   --surface: #ffffff;
-  --tint: #f1f2fb;
+  --tint: #f1f2fc;
   --ink: #0f0b4a;
-  --muted: #5b5a7d;
-  --line: #dfe0ef;
-  --blue: #1296f0;
-  --violet: #7a3cf0;
-  --accent: #4a45e0;
-  --on-accent: #ffffff;
-  --good: #0c7a55;
-  --good-bg: #e2f5ec;
-  --warn: #8a5a00;
-  --warn-bg: #fdf0d2;
-  --shadow: 0 24px 60px -28px rgba(15, 11, 74, .35);
+  --muted: #5d5c80;
+  --line: #e1e2f1;
+  --blue: #0fa0f5;
+  --violet: #7c3cf2;
+  --accent: #4b43e6;
+  --accent-soft: #ecebff;
+  --panel: #0f0b4a;
+  --panel-2: #1c1670;
+  --on-panel: #ffffff;
+  --on-panel-muted: #bfbde6;
+  --panel-line: rgba(255, 255, 255, .14);
+  --good: #0b7a54;
+  --good-bg: #e1f6ec;
+  --warn: #8a5800;
+  --warn-bg: #fdf0d0;
+  --glow-a: rgba(15, 160, 245, .16);
+  --glow-b: rgba(124, 60, 242, .14);
+  --shadow-sm: 0 1px 2px rgba(15, 11, 74, .06), 0 6px 16px -8px rgba(15, 11, 74, .14);
+  --shadow: 0 2px 4px rgba(15, 11, 74, .04), 0 30px 70px -30px rgba(15, 11, 74, .38);
+  --header-bg: rgba(250, 250, 255, .82);
   --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-lg: 24px;
+  --r-md: 16px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0b0a26; --surface: #15143a; --tint: #121130; --ink: #f1f1fb; --muted: #a9a8c9;
-    --line: #2b2a57; --blue: #4db4ff; --violet: #a57bff; --accent: #8f8bff; --on-accent: #0b0a26;
-    --good: #5fd6a6; --good-bg: #113a2e; --warn: #f2c666; --warn-bg: #3d2f0c;
-    --shadow: 0 24px 60px -28px rgba(0, 0, 0, .7);
+    --bg: #0a0923; --surface: #14133a; --tint: #100f2e; --ink: #f2f2fc; --muted: #aaa9cb;
+    --line: #2a2958; --blue: #4db6ff; --violet: #a880ff; --accent: #938fff; --accent-soft: #211f57;
+    --panel: #17155a; --panel-2: #241f85; --on-panel: #ffffff; --on-panel-muted: #c3c1ea; --panel-line: rgba(255, 255, 255, .16);
+    --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
+    --glow-a: rgba(77, 182, 255, .14); --glow-b: rgba(168, 128, 255, .16);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 16px -8px rgba(0, 0, 0, .5);
+    --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 30px 70px -30px rgba(0, 0, 0, .8);
+    --header-bg: rgba(10, 9, 35, .8);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0b0a26; --surface: #15143a; --tint: #121130; --ink: #f1f1fb; --muted: #a9a8c9;
-  --line: #2b2a57; --blue: #4db4ff; --violet: #a57bff; --accent: #8f8bff; --on-accent: #0b0a26;
-  --good: #5fd6a6; --good-bg: #113a2e; --warn: #f2c666; --warn-bg: #3d2f0c;
-  --shadow: 0 24px 60px -28px rgba(0, 0, 0, .7);
+  --bg: #0a0923; --surface: #14133a; --tint: #100f2e; --ink: #f2f2fc; --muted: #aaa9cb;
+  --line: #2a2958; --blue: #4db6ff; --violet: #a880ff; --accent: #938fff; --accent-soft: #211f57;
+  --panel: #17155a; --panel-2: #241f85; --on-panel: #ffffff; --on-panel-muted: #c3c1ea; --panel-line: rgba(255, 255, 255, .16);
+  --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
+  --glow-a: rgba(77, 182, 255, .14); --glow-b: rgba(168, 128, 255, .16);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 16px -8px rgba(0, 0, 0, .5);
+  --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 30px 70px -30px rgba(0, 0, 0, .8);
+  --header-bg: rgba(10, 9, 35, .8);
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
-h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
-h1, h2, h3 { font-family: var(--display); line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; }
-h1 { font-size: clamp(2.1rem, 5.4vw, 3.6rem); font-weight: 800; }
-h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; }
-h3 { font-size: 1.12rem; font-weight: 700; letter-spacing: -.01em; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; letter-spacing: -.025em; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 5.6vw, 3.75rem); font-weight: 800; }
+h2 { font-size: clamp(1.65rem, 3.6vw, 2.5rem); font-weight: 800; }
+h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.grad { background: linear-gradient(100deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-.wrap { max-width: 1120px; margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
-.band { padding-block: clamp(56px, 8vw, 104px); }
+.wrap { max-width: 1160px; margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: clamp(64px, 9vw, 120px); }
 .band.tinted { background: var(--tint); }
-.eyebrow { font: 600 .78rem/1.3 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.lead { color: var(--muted); font-size: 1.1rem; max-width: 60ch; }
-.head { display: grid; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 600 .78rem/1.3 var(--body); letter-spacing: .11em; text-transform: uppercase; color: var(--accent); }
+.lead { color: var(--muted); font-size: clamp(1.02rem, 1.5vw, 1.14rem); max-width: 58ch; }
+.head { display: grid; gap: 16px; justify-items: start; margin-bottom: clamp(32px, 4.5vw, 56px); }
+.head.center { justify-items: center; text-align: center; }
 
 /* Intestazione */
-.top { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 18px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.5rem/1 var(--display); letter-spacing: -.03em; }
-.brand svg { width: 34px; height: 34px; flex: none; }
-.nav { display: flex; align-items: center; gap: 26px; font-weight: 500; font-size: .95rem; }
-.nav a { text-decoration: none; color: var(--muted); }
-.nav a:hover { color: var(--ink); }
-@media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--header-bg); -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid transparent; transition: border-color .2s; }
+.topbar.scrolled { border-bottom-color: var(--line); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 72px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.55rem/1 var(--display); letter-spacing: -.035em; }
+.brand svg { width: 36px; height: 36px; flex: none; }
+.nav { display: flex; align-items: center; gap: 6px; font-weight: 500; font-size: .95rem; }
+.nav a.link { text-decoration: none; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s; }
+.nav a.link:hover { color: var(--ink); background: var(--accent-soft); }
+.nav .btn { margin-left: 10px; }
+@media (max-width: 820px) { .nav a.link { display: none; } }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1.5px solid transparent; font: 600 1rem/1 var(--body); text-decoration: none; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
-.btn.primary { background: linear-gradient(100deg, var(--blue), var(--violet)); color: #fff; box-shadow: 0 10px 24px -12px var(--violet); }
-.btn.ghost { border-color: var(--line); background: var(--surface); color: var(--ink); }
-.btn.small { min-height: 40px; padding: 0 16px; font-size: .92rem; }
-.nav a.btn { color: #fff; }
-.btn:hover { transform: translateY(-1px); }
-@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 26px; border-radius: 999px; border: 1.5px solid transparent; font: 600 1rem/1 var(--body); text-decoration: none; cursor: pointer; transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease; }
+.btn svg { width: 18px; height: 18px; transition: transform .16s ease; }
+.btn.primary { background: linear-gradient(100deg, var(--blue), var(--violet)); color: #fff; box-shadow: 0 12px 26px -12px var(--violet), inset 0 1px 0 rgba(255, 255, 255, .25); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 18px 32px -14px var(--violet), inset 0 1px 0 rgba(255, 255, 255, .25); }
+.btn.primary:hover svg { transform: translateX(3px); }
+.btn.ghost { border-color: var(--line); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
+.btn.ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+.btn.small { min-height: 42px; padding: 0 18px; font-size: .92rem; }
+.btn:active { transform: translateY(0); }
 
 /* Eroe */
-.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 72px); align-items: center; padding-block: clamp(32px, 6vw, 80px) clamp(56px, 8vw, 104px); }
-.hero-copy { display: grid; gap: 22px; }
-.hero h1 em { font-style: normal; background: linear-gradient(100deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-bg { position: relative; overflow: hidden; }
+.hero-bg::before, .hero-bg::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.hero-bg::before { width: 720px; height: 720px; right: -160px; top: -260px; background: radial-gradient(closest-side, var(--glow-b), transparent); }
+.hero-bg::after { width: 620px; height: 620px; left: -220px; bottom: -460px; background: radial-gradient(closest-side, var(--glow-a), transparent); }
+.hero { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(36px, 5vw, 80px); align-items: center; padding-block: clamp(36px, 6vw, 84px) clamp(64px, 9vw, 120px); }
+.hero-copy { display: grid; gap: 24px; justify-items: start; }
+.chip { display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); font-size: .86rem; font-weight: 500; color: var(--muted); }
+.chip b { font-weight: 600; color: var(--ink); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 4px var(--good-bg); }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.fine { color: var(--muted); font-size: .88rem; }
-@media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+.trust { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-size: .92rem; font-weight: 500; }
+.trust li { display: inline-flex; align-items: center; gap: 8px; }
+.trust svg { width: 18px; height: 18px; color: var(--good); }
+@media (max-width: 920px) { .hero { grid-template-columns: minmax(0, 1fr); } }
 
 /* Estratto canoni */
-.ledger { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 22px; min-width: 0; }
-.ledger-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-.ledger-top strong { font: 700 1rem/1.3 var(--display); }
-.ledger-top span { color: var(--muted); font-size: .82rem; }
-.ledger li { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: .93rem; }
-.ledger .m { font-weight: 600; }
+.ledger-stage { position: relative; min-width: 0; padding: 18px 0 50px; }
+.ledger { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 22px 24px; }
+.ledger-top { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.ledger-top .ico { width: 42px; height: 42px; border-radius: 12px; background: var(--accent-soft); display: grid; place-items: center; flex: none; }
+.ledger-top .ico svg { width: 24px; height: 24px; }
+.ledger-top div { min-width: 0; flex: 1; }
+.ledger-top strong { display: block; font: 700 1rem/1.3 var(--display); }
+.ledger-top span { color: var(--muted); font-size: .84rem; }
+.tag { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.ledger li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: .93rem; }
+.ledger .m { font-weight: 600; color: var(--muted); }
 .ledger .amt { font-weight: 600; font-variant-numeric: tabular-nums; }
-.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--good-bg); color: var(--good); }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--good-bg); color: var(--good); }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
 .pill.cover { background: var(--warn-bg); color: var(--warn); }
-.ledger-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 14px; }
-.ledger-foot span { color: var(--muted); font-size: .88rem; }
-.ledger-foot strong { font: 800 1.5rem/1 var(--display); font-variant-numeric: tabular-nums; }
-.ledger-note { margin-top: 12px; color: var(--muted); font-size: .8rem; }
+.ledger-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 16px; }
+.ledger-foot span { color: var(--muted); font-size: .9rem; }
+.ledger-foot strong { font: 800 1.7rem/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.toast { position: absolute; right: -14px; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 12px; border-radius: 16px; background: var(--panel); color: var(--on-panel); box-shadow: var(--shadow); max-width: calc(100% - 12px); }
+.toast .ico { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--violet)); display: grid; place-items: center; flex: none; }
+.toast .ico svg { width: 20px; height: 20px; color: #fff; }
+.toast b { display: block; font-size: .9rem; font-weight: 600; line-height: 1.3; }
+.toast span { font-size: .8rem; color: var(--on-panel-muted); }
+@media (max-width: 520px) { .toast { right: 6px; } .ledger { padding: 18px 16px; } .pill { font-size: .72rem; } }
 
-/* Griglie */
-.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(24px, 3vw, 40px); }
-.item { display: grid; gap: 10px; align-content: start; min-width: 0; }
-.item p { color: var(--muted); }
-.item svg { width: 28px; height: 28px; color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .ledger { animation: rise .7s cubic-bezier(.2, .8, .2, 1) both; }
+  .toast { animation: rise .7s .35s cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes rise { from { transform: translateY(18px); opacity: .0; } to { transform: none; opacity: 1; } }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .btn svg, .card { transition: none !important; } }
 
-.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
-@media (max-width: 860px) { .split { grid-template-columns: minmax(0, 1fr); } }
+/* Schede */
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 28px; display: grid; gap: 12px; align-content: start; min-width: 0; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.card p { color: var(--muted); }
+.tile { width: 48px; height: 48px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin-bottom: 6px; }
+.tile svg { width: 24px; height: 24px; }
 
-.included { margin-top: clamp(36px, 5vw, 56px); padding-top: 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 28px; }
-.included ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px 24px; }
-.included li { padding-left: 26px; position: relative; }
-.included li::before { content: ""; position: absolute; left: 0; top: .5em; width: 14px; height: 8px; border-left: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent); transform: rotate(-45deg); }
-.price { font: 800 clamp(2.6rem, 6vw, 3.6rem)/1 var(--display); letter-spacing: -.03em; }
-.price small { display: block; margin-top: 8px; font: 500 1rem/1.4 var(--body); letter-spacing: 0; color: var(--muted); }
-@media (max-width: 760px) { .included { grid-template-columns: minmax(0, 1fr); } }
+/* Pannello prezzo */
+.pricing { margin-top: 20px; border-radius: var(--r-lg); padding: clamp(28px, 4.5vw, 52px); color: var(--on-panel); background: radial-gradient(900px 400px at 100% 0%, var(--panel-2), transparent 70%), var(--panel); display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 4vw, 56px); align-items: center; position: relative; overflow: hidden; }
+.price { font: 800 clamp(4rem, 10vw, 6.5rem)/.9 var(--display); letter-spacing: -.05em; background: linear-gradient(100deg, #5cc6ff, #b592ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pricing h3 { font-size: 1.35rem; margin-top: 14px; }
+.pricing .sub { color: var(--on-panel-muted); margin-top: 8px; }
+.pricing ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 28px; }
+.pricing li { display: flex; gap: 12px; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid var(--panel-line); }
+.pricing li svg { width: 20px; height: 20px; flex: none; margin-top: 2px; color: #7fd0ff; }
+@media (max-width: 820px) { .pricing { grid-template-columns: minmax(0, 1fr); } }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(36px, 5vw, 80px); align-items: center; }
+.split.top-align { align-items: start; }
+.split .head { margin-bottom: 0; }
+@media (max-width: 900px) { .split { grid-template-columns: minmax(0, 1fr); } }
 
 /* Calcolatore */
-.calc { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: clamp(20px, 3vw, 32px); display: grid; gap: 22px; min-width: 0; }
-.calc label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
-.calc output { font: 800 1.6rem/1 var(--display); font-variant-numeric: tabular-nums; }
-.calc input[type=range] { width: 100%; accent-color: var(--accent); height: 28px; }
-.calc dl { display: grid; gap: 0; }
-.calc dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
-.calc dt { color: var(--muted); }
-.calc dd { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.calc dl div.total dd { font: 800 1.35rem/1.2 var(--display); color: var(--accent); }
-.calc .compare { background: var(--tint); border-radius: 12px; padding: 14px 16px; font-size: .93rem; color: var(--muted); }
-.calc .compare strong { color: var(--ink); }
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(22px, 3vw, 34px); display: grid; gap: 24px; min-width: 0; box-shadow: var(--shadow); }
+.calc label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; color: var(--muted); }
+.calc output { font: 800 2rem/1 var(--display); letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.calc input[type=range] { --p: 23%; -webkit-appearance: none; appearance: none; width: 100%; height: 28px; margin: 10px 0 0; background: transparent; cursor: pointer; }
+.calc input[type=range]::-webkit-slider-runnable-track { height: 8px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--violet)) 0 / var(--p) 100% no-repeat, var(--line); }
+.calc input[type=range]::-moz-range-track { height: 8px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--violet)) 0 / var(--p) 100% no-repeat, var(--line); }
+.calc input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -9px; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); box-shadow: 0 4px 10px -2px rgba(15, 11, 74, .4); }
+.calc input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); box-shadow: 0 4px 10px -2px rgba(15, 11, 74, .4); }
+.scale { display: flex; justify-content: space-between; font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.results div { background: var(--tint); border-radius: var(--r-md); padding: 16px; min-width: 0; }
+.results .wide { grid-column: 1 / -1; background: var(--accent-soft); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; }
+.results dt { color: var(--muted); font-size: .86rem; }
+.results dd { font: 700 1.3rem/1.3 var(--display); font-variant-numeric: tabular-nums; }
+.results .wide dd { font-size: 1.75rem; font-weight: 800; color: var(--accent); letter-spacing: -.02em; }
+.bars { display: grid; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+.bars p { font-size: .86rem; font-weight: 600; color: var(--muted); }
+.bar { display: grid; gap: 6px; font-size: .9rem; }
+.bar > div { display: flex; justify-content: space-between; gap: 12px; }
+.bar b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar i { display: block; height: 12px; border-radius: 999px; }
+.bar.cost i { width: 20%; background: linear-gradient(90deg, var(--blue), var(--violet)); }
+.bar.loss i { width: 100%; background: var(--warn); opacity: .75; }
 
 /* Passi */
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(24px, 3vw, 36px); counter-reset: s; }
-.steps li { display: grid; gap: 10px; align-content: start; counter-increment: s; padding-top: 18px; border-top: 2px solid var(--line); }
-.steps li::before { content: counter(s); font: 800 1rem/1 var(--display); color: var(--accent); }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; counter-reset: s; position: relative; }
+.steps::before { content: ""; position: absolute; left: 24px; right: calc(25% - 34px); top: 23px; height: 2px; background: linear-gradient(90deg, var(--blue), var(--violet)); opacity: .35; }
+.steps li { position: relative; display: grid; gap: 10px; align-content: start; counter-increment: s; padding-right: 8px; }
+.steps li::before { content: counter(s); width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 2px solid var(--accent); color: var(--accent); font: 800 1.1rem/1 var(--display); margin-bottom: 10px; box-shadow: 0 0 0 6px var(--tint); }
 .steps p { color: var(--muted); }
+@media (max-width: 860px) {
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .steps::before { left: 23px; right: auto; top: 24px; bottom: 24px; width: 2px; height: auto; background: linear-gradient(180deg, var(--blue), var(--violet)); }
+  .steps li { grid-template-columns: 48px minmax(0, 1fr); column-gap: 18px; }
+  .steps li::before { grid-row: span 2; margin: 0; }
+  .steps li h3 { align-self: end; }
+}
 
-/* Domilis+ */
-.plus { display: grid; gap: 0; border-top: 1px solid var(--line); }
-.plus li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-.plus p { color: var(--muted); grid-column: 1 / -1; }
-.soon { align-self: center; font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+/* Annuncio di esempio */
+.listing { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); max-width: 460px; width: 100%; justify-self: center; }
+.listing .photo { position: relative; aspect-ratio: 16 / 10; }
+.listing .photo > svg { display: block; width: 100%; height: 100%; }
+.listing .badges { position: absolute; left: 14px; top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #ffffff; color: #0f0b4a; font-size: .78rem; font-weight: 600; box-shadow: 0 4px 12px -4px rgba(15, 11, 74, .4); }
+.badge svg { width: 14px; height: 14px; color: #0b7a54; }
+.badge.dark { background: #0f0b4a; color: #fff; }
+.listing .body { padding: 22px 24px 24px; display: grid; gap: 14px; }
+.listing .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.listing .rent { font: 800 1.5rem/1 var(--display); letter-spacing: -.02em; white-space: nowrap; }
+.listing .rent small { font: 500 .85rem var(--body); color: var(--muted); letter-spacing: 0; }
+.listing .where { color: var(--muted); font-size: .92rem; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.facts li { background: var(--tint); border-radius: 10px; padding: 6px 12px; font-size: .86rem; font-weight: 500; }
+.listing .cta { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--muted); }
+.listing .cta b { color: var(--good); font-weight: 600; }
+
+.perks { display: grid; gap: 14px; margin-top: 28px; }
+.perks li { display: flex; gap: 14px; align-items: flex-start; }
+.perks .tile { width: 40px; height: 40px; border-radius: 12px; margin: 0; flex: none; }
+.perks .tile svg { width: 20px; height: 20px; }
+.perks p { color: var(--muted); font-size: .95rem; }
+
+.plus-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; margin: clamp(48px, 6vw, 80px) 0 20px; }
+.plus-head h3 { font-size: 1.35rem; }
+.plus-head p { color: var(--muted); }
+.card .soon { justify-self: start; }
+.soon { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; }
 
 /* Backbone */
-.rails { display: flex; flex-wrap: wrap; gap: 10px; }
-.rails li { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-weight: 500; font-size: .93rem; }
+.rails { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.rails li { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-md); padding: 14px 16px; font-weight: 500; font-size: .95rem; }
+.rails svg { width: 20px; height: 20px; color: var(--accent); flex: none; }
 
 /* FAQ */
-.faq { max-width: 780px; border-top: 1px solid var(--line); }
-.faq details { border-bottom: 1px solid var(--line); }
-.faq summary { cursor: pointer; padding: 18px 32px 18px 0; font: 700 1.05rem/1.35 var(--display); list-style: none; position: relative; }
+.faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+@media (max-width: 900px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+.faq { display: grid; gap: 10px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); transition: border-color .2s, box-shadow .2s; }
+.faq details[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); box-shadow: var(--shadow-sm); }
+.faq summary { cursor: pointer; padding: 18px 56px 18px 22px; font: 700 1.02rem/1.35 var(--display); list-style: none; position: relative; border-radius: var(--r-md); }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font: 500 1.5rem/1 var(--body); color: var(--accent); }
-.faq details[open] summary::after { content: "–"; }
-.faq p { color: var(--muted); padding: 0 0 20px; max-width: 65ch; }
+.faq summary::after { content: ""; position: absolute; right: 22px; top: 50%; width: 10px; height: 10px; border-right: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent); transform: translateY(-70%) rotate(45deg); transition: transform .2s; }
+.faq details[open] summary::after { transform: translateY(-30%) rotate(225deg); }
+.faq p { color: var(--muted); padding: 0 22px 20px; max-width: 65ch; }
 
 /* Lista d'attesa */
-.join { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: clamp(22px, 4vw, 44px); box-shadow: var(--shadow); }
+.cta-band { padding-block: clamp(40px, 6vw, 80px); }
+.cta-panel { border-radius: clamp(24px, 3vw, 36px); padding: clamp(28px, 5vw, 64px); color: var(--on-panel); background: radial-gradient(700px 420px at 0% 100%, rgba(15, 160, 245, .35), transparent 70%), radial-gradient(800px 460px at 100% 0%, rgba(124, 60, 242, .5), transparent 70%), var(--panel); }
+.cta-panel .eyebrow { color: #8fd4ff; }
+.cta-panel .lead { color: var(--on-panel-muted); }
+.cta-panel .trust { color: var(--on-panel-muted); margin-top: 6px; }
+.cta-panel .trust svg { color: #8fd4ff; }
+.join { background: var(--surface); color: var(--ink); border-radius: var(--r-lg); padding: clamp(22px, 3.5vw, 36px); box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .6); min-width: 0; }
 form { display: grid; gap: 18px; min-width: 0; }
-.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--tint); border-radius: 999px; border: 0; margin: 0; }
-.seg label { position: relative; text-align: center; padding: 11px 8px; border-radius: 999px; font-weight: 600; font-size: .95rem; cursor: pointer; color: var(--muted); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--tint); border-radius: 999px; border: 0; margin: 0; min-width: 0; }
+.seg label { position: relative; text-align: center; padding: 12px 8px; border-radius: 999px; font-weight: 600; font-size: .95rem; cursor: pointer; color: var(--muted); transition: background .15s, color .15s; }
 .seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.seg label:has(input:checked) { background: var(--surface); color: var(--ink); box-shadow: 0 2px 8px -4px rgba(15, 11, 74, .4); }
+.seg label:has(input:checked) { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
 .seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
 .field { display: grid; gap: 6px; min-width: 0; }
-.field span { font-weight: 600; font-size: .9rem; }
-.field input, .field select { width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); font: 400 1rem var(--body); }
-.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+.field span { font-weight: 600; font-size: .88rem; }
+.field input, .field select { width: 100%; min-height: 50px; padding: 0 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); font: 400 1rem var(--body); transition: border-color .15s, box-shadow .15s; }
+.field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 18px; }
 .consent { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--muted); }
-.consent input { margin-top: 4px; width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+.consent input { margin-top: 3px; width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+form .btn { width: 100%; }
 .status { border-radius: 12px; padding: 12px 16px; font-size: .93rem; background: var(--good-bg); color: var(--good); }
 .status.demo { background: var(--warn-bg); color: var(--warn); }
 
-footer { padding-block: 40px 56px; color: var(--muted); font-size: .85rem; display: grid; gap: 16px; }
-footer .brand { font-size: 1.2rem; color: var(--ink); }
-footer p { max-width: 80ch; }
+footer { padding-block: 28px 56px; color: var(--muted); font-size: .85rem; display: grid; gap: 16px; }
+footer .frow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; }
+footer .brand { font-size: 1.25rem; color: var(--ink); }
+footer .brand svg { width: 28px; height: 28px; }
+footer p { max-width: 82ch; }
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="dg" x1="14" y1="100" x2="100" y2="22" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#12b0ff"/><stop offset=".55" stop-color="#3f6cf6"/><stop offset="1" stop-color="#8a3df2"/>
+    <linearGradient id="dg" x1="8" y1="96" x2="108" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0aa8ff"/><stop offset=".5" stop-color="#3d6cf7"/><stop offset="1" stop-color="#8b3cf4"/>
     </linearGradient>
     <symbol id="mark" viewBox="0 0 120 120">
-      <path d="M94 70V48L60 22 26 48v50h36l32-26" fill="none" stroke="url(#dg)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M98 72V49L60 20 21 49v40" fill="none" stroke="url(#dg)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 89l22-2 30-15q5-2 5 4v19q0 4-4 4H24q-10 0-10-10z" fill="url(#dg)" stroke="url(#dg)" stroke-width="4" stroke-linejoin="round"/>
     </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.800-1.200-8-4.500-8-9V6l8-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.500 12l2.500 2.500 4.500-4.500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
-<header class="wrap top">
-  <a class="brand" href="#" aria-label="Domilis, pagina iniziale"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
-  <nav class="nav" aria-label="Sezioni">
-    <a href="#proprietari">Proprietari</a>
-    <a href="#come-funziona">Come funziona</a>
-    <a href="#inquilini">Inquilini</a>
-    <a href="#domande">Domande</a>
-    <a class="btn primary small" href="#lista">Entra in lista</a>
-  </nav>
-</header>
+<div class="topbar" id="topbar">
+  <header class="wrap top">
+    <a class="brand" href="#" aria-label="Domilis, pagina iniziale"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+    <nav class="nav" aria-label="Sezioni">
+      <a class="link" href="#proprietari">Proprietari</a>
+      <a class="link" href="#come-funziona">Come funziona</a>
+      <a class="link" href="#inquilini">Inquilini</a>
+      <a class="link" href="#domande">Domande</a>
+      <a class="btn primary small" href="#lista">Entra in lista</a>
+    </nav>
+  </header>
+</div>
 
 <main>
-  <section class="wrap hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Affitti di medio e lungo periodo · In arrivo a Milano</p>
-      <h1>L'affitto arriva ogni mese. <em>Anche quando l'inquilino non paga.</em></h1>
-      <p class="lead">Pubblichi l'annuncio, al resto pensa Domilis: selezione dell'inquilino, contratto, incasso, tutela legale e danni. Tu paghi il 10% del canone, e solo quando incassi.</p>
-      <div class="actions">
-        <a class="btn primary" href="#lista" data-role="proprietario">Ho una casa da affittare</a>
-        <a class="btn ghost" href="#lista" data-role="inquilino">Cerco casa</a>
+  <div class="hero-bg">
+    <section class="wrap hero">
+      <div class="hero-copy">
+        <p class="chip"><span class="dot"></span><span><b>In arrivo a Milano</b> · affitti di medio e lungo periodo</span></p>
+        <h1>L'affitto arriva ogni mese. <span class="grad">Anche quando l'inquilino non paga.</span></h1>
+        <p class="lead">Pubblichi l'annuncio, al resto pensa Domilis: selezione dell'inquilino, contratto, incasso, tutela legale e danni. Paghi il 10% del canone, e solo quando incassi.</p>
+        <div class="actions">
+          <a class="btn primary" href="#lista" data-role="proprietario">Ho una casa da affittare <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn ghost" href="#lista" data-role="inquilino">Cerco casa</a>
+        </div>
+        <ul class="trust">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Nessun costo fisso</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Nessuna provvigione d'ingresso</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Tutto online</li>
+        </ul>
       </div>
-      <p class="fine">Renting made effortless. Nessun costo fisso, nessuna provvigione d'ingresso.</p>
-    </div>
 
-    <aside class="ledger" aria-label="Esempio di estratto dei canoni">
-      <div class="ledger-top">
-        <strong>Estratto canoni · bilocale, 1.200 € al mese</strong>
-        <span>Esempio</span>
+      <div class="ledger-stage">
+        <aside class="ledger" aria-label="Esempio di estratto dei canoni">
+          <div class="ledger-top">
+            <span class="ico"><svg aria-hidden="true"><use href="#mark"/></svg></span>
+            <div><strong>Bilocale · Porta Romana</strong><span>Canone 1.200 € al mese</span></div>
+            <span class="tag">Esempio</span>
+          </div>
+          <ul>
+            <li><span class="m">Gen</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+            <li><span class="m">Feb</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+            <li><span class="m">Mar</span><span><span class="pill cover">Inquilino in ritardo · paga Domilis</span></span><span class="amt">1.080 €</span></li>
+            <li><span class="m">Apr</span><span><span class="pill cover">Inquilino in ritardo · paga Domilis</span></span><span class="amt">1.080 €</span></li>
+            <li><span class="m">Mag</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+            <li><span class="m">Giu</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
+          </ul>
+          <div class="ledger-foot"><span>Incassato in sei mesi</span><strong>6.480 €</strong></div>
+        </aside>
+        <div class="toast" aria-hidden="true">
+          <span class="ico"><svg><use href="#i-check"/></svg></span>
+          <div><b>Accredito ricevuto · 1.080 €</b><span>Canone di aprile, puntuale come sempre</span></div>
+        </div>
       </div>
-      <ul>
-        <li><span class="m">Gen</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
-        <li><span class="m">Feb</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
-        <li><span class="m">Mar</span><span><span class="pill cover">Inquilino in ritardo · pagato da Domilis</span></span><span class="amt">1.080 €</span></li>
-        <li><span class="m">Apr</span><span><span class="pill cover">Inquilino in ritardo · pagato da Domilis</span></span><span class="amt">1.080 €</span></li>
-        <li><span class="m">Mag</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
-        <li><span class="m">Giu</span><span><span class="pill">Accreditato il 5</span></span><span class="amt">1.080 €</span></li>
-      </ul>
-      <div class="ledger-foot"><span>Incassato in sei mesi</span><strong>6.480 €</strong></div>
-      <p class="ledger-note">Canone 1.200 € meno il 10% di Domilis. Il proprietario non ha fatto nulla a marzo e aprile.</p>
-    </aside>
-  </section>
+    </section>
+  </div>
 
   <section class="band tinted" id="proprietari">
     <div class="wrap">
@@ -244,32 +380,36 @@ footer p { max-width: 80ch; }
         <p class="lead">La paura di non essere pagati tiene vuote molte case. Domilis si prende quel rischio al posto tuo.</p>
       </div>
       <div class="grid3">
-        <div class="item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8.5 15l2.5 2.5 4.5-4.5"/></svg>
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M8.500 15l2.500 2.500 4.500-4.500"/></svg></span>
           <h3>Canone garantito</h3>
           <p>Accredito ogni mese nello stesso giorno. Se l'inquilino ritarda o smette di pagare, il canone lo versa Domilis.</p>
-        </div>
-        <div class="item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 7h14M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7zM19 7l-3 7a3.5 3.5 0 0 0 6 0l-3-7zM8 21h8"/></svg>
+        </article>
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 7h14M5 7l-3 7a3.500 3.500 0 0 0 6 0L5 7zM19 7l-3 7a3.500 3.500 0 0 0 6 0l-3-7zM8 21h8"/></svg></span>
           <h3>Tutela legale</h3>
-          <p>Solleciti, diffide e, se serve, procedura di sfratto: avvocato e spese sono a carico nostro, fino al rilascio dell'immobile.</p>
-        </div>
-        <div class="item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9z"/><path d="M12 10l-2 3h4l-2 3"/></svg>
+          <p>Solleciti, diffide e, se serve, procedura di sfratto. Avvocato e spese sono a carico nostro, fino al rilascio dell'immobile.</p>
+        </article>
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8z"/><path d="M9 14.500l2 2 4-4"/></svg></span>
           <h3>Danni e ripristino</h3>
           <p>Verbale di consegna con foto all'ingresso e all'uscita. I danni oltre la normale usura vengono riparati senza anticipi da parte tua.</p>
-        </div>
+        </article>
       </div>
 
-      <div class="included">
-        <p class="price">10%<small>del canone incassato. Nient'altro.</small></p>
+      <div class="pricing">
+        <div>
+          <p class="price">10%</p>
+          <h3>del canone incassato. Nient'altro.</h3>
+          <p class="sub">Se la casa è vuota non paghi nulla.</p>
+        </div>
         <ul>
-          <li>Annuncio creato da te in pochi minuti</li>
-          <li>Selezione e verifica dell'inquilino</li>
-          <li>Contratto e registrazione all'Agenzia delle Entrate</li>
-          <li>Incasso e accredito mensile</li>
-          <li>Gestione di guasti e manutenzioni</li>
-          <li>Un referente per tutta la durata</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Annuncio creato da te in pochi minuti</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Selezione e verifica dell'inquilino</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Contratto e registrazione all'Agenzia delle Entrate</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Incasso e accredito mensile</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Gestione di guasti e manutenzioni</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Un referente per tutta la durata</li>
         </ul>
       </div>
     </div>
@@ -281,19 +421,24 @@ footer p { max-width: 80ch; }
         <p class="eyebrow">Fai il conto</p>
         <h2>Quanto incassi, mese dopo mese</h2>
         <p class="lead">Il servizio costa quanto 1,2 mensilità l'anno. Una morosità con sfratto può bruciarne dodici, più le spese legali.</p>
-        <p class="fine">Il calcolo è indicativo e non considera imposte e spese condominiali.</p>
+        <p class="lead" style="font-size:.88rem">Calcolo indicativo, al lordo di imposte e spese condominiali.</p>
       </div>
       <div class="calc">
         <div>
           <label for="canone">Canone mensile <output id="canone-out" for="canone">1.200 €</output></label>
           <input type="range" id="canone" min="500" max="3500" step="50" value="1200">
+          <div class="scale" aria-hidden="true"><span>500 €</span><span>3.500 €</span></div>
         </div>
-        <dl>
-          <div><dt>Costo Domilis al mese (10%)</dt><dd id="c-fee">120 €</dd></div>
+        <dl class="results">
+          <div><dt>Costo Domilis al mese</dt><dd id="c-fee">120 €</dd></div>
           <div><dt>Ricevi ogni mese</dt><dd id="c-net">1.080 €</dd></div>
-          <div class="total"><dt>Ricevi in un anno, garantito</dt><dd id="c-year">12.960 €</dd></div>
+          <div class="wide"><dt>Ricevi in un anno, garantito</dt><dd id="c-year">12.960 €</dd></div>
         </dl>
-        <p class="compare">Senza copertura, <strong>sei mesi di morosità</strong> ti costano <strong id="c-loss">7.200 €</strong> di canoni persi. Con Domilis il costo di un anno intero è <strong id="c-cost">1.440 €</strong>.</p>
+        <div class="bars">
+          <p>Quanto pesa il rischio</p>
+          <div class="bar cost"><div><span>Domilis per un anno intero</span><b id="c-cost">1.440 €</b></div><i></i></div>
+          <div class="bar loss"><div><span>Sei mesi di morosità senza copertura</span><b id="c-loss">7.200 €</b></div><i></i></div>
+        </div>
       </div>
     </div>
   </section>
@@ -314,25 +459,89 @@ footer p { max-width: 80ch; }
   </section>
 
   <section class="band" id="inquilini">
-    <div class="wrap split">
-      <div>
-        <div class="head">
-          <p class="eyebrow">Per chi cerca casa</p>
-          <h2>Entri senza tre mensilità di deposito</h2>
-          <p class="lead">La garanzia verso il proprietario la mette Domilis. Tu superi una verifica e paghi il canone, senza commissioni di agenzia.</p>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <div class="head">
+            <p class="eyebrow">Per chi cerca casa</p>
+            <h2>Entri senza tre mensilità di deposito</h2>
+            <p class="lead">La garanzia verso il proprietario la mette Domilis. Tu superi una verifica e paghi il canone, senza commissioni di agenzia.</p>
+          </div>
+          <ul class="perks">
+            <li><span class="tile"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>Case verificate</h3><p>Ogni immobile è controllato prima di andare online. Niente annunci fantasma.</p></div></li>
+            <li><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.500" width="10" height="19" rx="2.500"/><path d="M11 18h2"/></svg></span><div><h3>Tutto dal telefono</h3><p>Candidatura, firma e pagamenti online. Un solo referente per i guasti.</p></div></li>
+          </ul>
         </div>
-        <div class="grid3">
-          <div class="item"><h3>Case verificate</h3><p>Ogni immobile è controllato prima di andare online. Niente annunci fantasma.</p></div>
-          <div class="item"><h3>Tutto digitale</h3><p>Candidatura, firma e pagamenti dal telefono. Un solo referente per i guasti.</p></div>
-        </div>
+
+        <figure class="listing" aria-label="Esempio di annuncio">
+          <div class="photo">
+            <svg viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs>
+                <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9ecff"/><stop offset="1" stop-color="#d9d4fb"/></linearGradient>
+                <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd2ff"/><stop offset="1" stop-color="#e6f5ff"/></linearGradient>
+                <linearGradient id="sofa" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f7df6"/><stop offset="1" stop-color="#7c3cf2"/></linearGradient>
+              </defs>
+              <rect width="480" height="300" fill="url(#wall)"/>
+              <rect y="232" width="480" height="68" fill="#c9b79f"/>
+              <rect y="232" width="480" height="5" fill="#b7a48b"/>
+              <rect x="56" y="44" width="150" height="130" rx="8" fill="#ffffff"/>
+              <rect x="64" y="52" width="134" height="114" rx="4" fill="url(#sky)"/>
+              <path d="M64 140l30-26 26 18 34-30 44 34v30H64z" fill="#b9c8f5"/>
+              <rect x="129" y="52" width="4" height="114" fill="#ffffff"/>
+              <rect x="64" y="107" width="134" height="4" fill="#ffffff"/>
+              <rect x="252" y="62" width="62" height="78" rx="6" fill="#ffffff"/>
+              <circle cx="283" cy="94" r="16" fill="#ffc86b"/>
+              <path d="M258 134l18-20 14 12 18-18v26z" fill="#7c3cf2" opacity=".55"/>
+              <rect x="228" y="170" width="200" height="56" rx="16" fill="url(#sofa)"/>
+              <rect x="216" y="188" width="32" height="50" rx="12" fill="#2a63e0"/>
+              <rect x="408" y="188" width="32" height="50" rx="12" fill="#6a34d8"/>
+              <rect x="244" y="200" width="168" height="34" rx="10" fill="#4f6ff5"/>
+              <rect x="262" y="176" width="56" height="34" rx="10" fill="#ffffff" opacity=".9"/>
+              <rect x="240" y="234" width="8" height="14" fill="#3b2f66"/><rect x="408" y="234" width="8" height="14" fill="#3b2f66"/>
+              <rect x="112" y="204" width="44" height="42" rx="8" fill="#ffffff"/>
+              <path d="M134 204c-4-30-26-38-30-60 18 6 28 22 30 40 0-26 12-44 30-52-2 28-14 44-24 72z" fill="#2fa87a"/>
+              <rect x="372" y="60" width="4" height="60" fill="#3b2f66"/>
+              <path d="M350 120h48l-10-34h-28z" fill="#ffffff"/>
+            </svg>
+            <div class="badges">
+              <span class="badge"><svg aria-hidden="true"><use href="#i-check"/></svg>Verificato</span>
+              <span class="badge dark">Zero deposito</span>
+            </div>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div><h3>Bilocale luminoso</h3><p class="where">Porta Romana, Milano</p></div>
+              <p class="rent">1.200 € <small>al mese</small></p>
+            </div>
+            <ul class="facts"><li>55 m²</li><li>2° piano</li><li>Arredato</li><li>Contratto 3+2</li></ul>
+            <p class="cta"><span>Annuncio di esempio</span><b>Disponibile da subito</b></p>
+          </div>
+        </figure>
       </div>
-      <div>
-        <h3 style="margin-bottom:14px">Domilis+ · servizi per la casa, a scelta</h3>
-        <ul class="plus">
-          <li><h3>Pulizie</h3><span class="soon">In arrivo</span><p>Pulizia periodica con lo stesso professionista, addebitata insieme al canone.</p></li>
-          <li><h3>Benessere</h3><span class="soon">In arrivo</span><p>Un abbonamento per palestre e studi della tua zona.</p></li>
-          <li><h3>Utenze e internet</h3><span class="soon">In arrivo</span><p>Volture e attivazioni fatte da noi, pronte il giorno dell'ingresso.</p></li>
-        </ul>
+
+      <div class="plus-head">
+        <h3>Domilis+ <span class="grad">servizi per la casa, a scelta</span></h3>
+        <p>Si aggiungono al canone, si tolgono quando vuoi.</p>
+      </div>
+      <div class="grid3">
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.800 4.700L18.500 9.500l-4.700 1.800L12 16l-1.800-4.700L5.500 9.500l4.700-1.800L12 3zM18.500 15.500l.800 2.200 2.200.800-2.200.800-.800 2.200-.800-2.200-2.200-.800 2.200-.800.800-2.200z"/></svg></span>
+          <h3>Pulizie</h3>
+          <p>Pulizia periodica con lo stesso professionista, addebitata insieme al canone.</p>
+          <span class="soon">In arrivo</span>
+        </article>
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.500 6.500v11M17.500 6.500v11M3.500 9v6M20.500 9v6M6.500 12h11"/></svg></span>
+          <h3>Benessere</h3>
+          <p>Un abbonamento unico per palestre e studi della tua zona.</p>
+          <span class="soon">In arrivo</span>
+        </article>
+        <article class="card">
+          <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L5 13.500h6L10 22l9-12h-6.500L13 2z"/></svg></span>
+          <h3>Utenze e internet</h3>
+          <p>Volture e attivazioni fatte da noi, pronte il giorno dell'ingresso.</p>
+          <span class="soon">In arrivo</span>
+        </article>
       </div>
     </div>
   </section>
@@ -345,24 +554,24 @@ footer p { max-width: 80ch; }
         <p class="lead">Contratti validi, registrati e fiscalmente in ordine, con gli strumenti che usi già.</p>
       </div>
       <ul class="rails">
-        <li>Accesso con SPID e CIE</li>
-        <li>Registrazione all'Agenzia delle Entrate</li>
-        <li>Cedolare secca</li>
-        <li>Canone concordato 3+2</li>
-        <li>Contratto 4+4</li>
-        <li>Transitorio e studenti</li>
-        <li>Addebito diretto SEPA</li>
-        <li>Firma digitale</li>
-        <li>Dati conservati in UE</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Accesso con SPID e CIE</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Registrazione all'Agenzia delle Entrate</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Cedolare secca</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Canone concordato 3+2</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Contratto 4+4</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Transitorio e studenti</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Addebito diretto SEPA</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Firma digitale</li>
       </ul>
     </div>
   </section>
 
   <section class="band" id="domande">
-    <div class="wrap">
+    <div class="wrap faq-grid">
       <div class="head">
         <p class="eyebrow">Domande frequenti</p>
         <h2>Cosa succede se l'inquilino non paga?</h2>
+        <p class="lead">Le risposte alle domande che ci fanno più spesso i proprietari.</p>
       </div>
       <div class="faq">
         <details open>
@@ -393,39 +602,48 @@ footer p { max-width: 80ch; }
     </div>
   </section>
 
-  <section class="band tinted" id="lista">
-    <div class="wrap split">
-      <div class="head">
-        <p class="eyebrow">Lista d'attesa</p>
-        <h2>Sii tra i primi a Milano</h2>
-        <p class="lead">Lascia i tuoi contatti. Ti scriviamo quando apriamo nella tua zona, senza impegno.</p>
-      </div>
-      <div class="join">
-        <form id="waitlist" novalidate>
-          <fieldset class="seg">
-            <label><input type="radio" name="ruolo" id="ruolo-proprietario" value="proprietario" checked>Ho una casa</label>
-            <label><input type="radio" name="ruolo" id="ruolo-inquilino" value="inquilino">Cerco casa</label>
-          </fieldset>
-          <label class="field"><span>Email</span><input type="email" id="email" name="email" autocomplete="email" placeholder="nome@esempio.it" required></label>
-          <div class="row2">
-            <label class="field"><span>Città</span><input type="text" id="citta" name="citta" value="Milano" required></label>
-            <label class="field" id="immobili-field"><span>Immobili da affittare</span>
-              <select id="immobili" name="immobili"><option>1</option><option>2–3</option><option>4 o più</option></select>
-            </label>
-          </div>
-          <label class="consent"><input type="checkbox" id="privacy" name="privacy" required><span>Acconsento a essere contattato da Domilis su questo servizio.</span></label>
-          <button class="btn primary" type="submit" id="invia">Entra in lista</button>
-          <p class="status" id="esito" role="status" hidden></p>
-        </form>
+  <section class="cta-band" id="lista">
+    <div class="wrap">
+      <div class="cta-panel split">
+        <div class="head">
+          <p class="eyebrow">Lista d'attesa</p>
+          <h2>Sii tra i primi a Milano</h2>
+          <p class="lead">Lascia i tuoi contatti. Ti scriviamo quando apriamo nella tua zona, senza impegno.</p>
+          <ul class="trust">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Gratis</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Nessun vincolo</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Un minuto</li>
+          </ul>
+        </div>
+        <div class="join">
+          <form id="waitlist" novalidate>
+            <fieldset class="seg">
+              <label><input type="radio" name="ruolo" id="ruolo-proprietario" value="proprietario" checked>Ho una casa</label>
+              <label><input type="radio" name="ruolo" id="ruolo-inquilino" value="inquilino">Cerco casa</label>
+            </fieldset>
+            <label class="field"><span>Email</span><input type="email" id="email" name="email" autocomplete="email" placeholder="nome@esempio.it" required></label>
+            <div class="row2">
+              <label class="field"><span>Città</span><input type="text" id="citta" name="citta" value="Milano" required></label>
+              <label class="field" id="immobili-field"><span>Immobili da affittare</span>
+                <select id="immobili" name="immobili"><option>1</option><option>2–3</option><option>4 o più</option></select>
+              </label>
+            </div>
+            <label class="consent"><input type="checkbox" id="privacy" name="privacy" required><span>Acconsento a essere contattato da Domilis su questo servizio.</span></label>
+            <button class="btn primary" type="submit" id="invia">Entra in lista <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <p class="status" id="esito" role="status" hidden></p>
+          </form>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
 <footer class="wrap">
-  <a class="brand" href="#"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+  <div class="frow">
+    <a class="brand" href="#"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+    <span>Renting made effortless · © 2026 Domilis</span>
+  </div>
   <p>Domilis è un servizio in fase di lancio. Le coperture descritte saranno prestate tramite un partner assicurativo e valgono per i contratti con inquilini approvati da Domilis, alle condizioni che verranno pubblicate prima dell'attivazione.</p>
-  <p>© 2026 Domilis</p>
 </footer>
 
 <script>
@@ -436,8 +654,8 @@ const euro = n => n.toLocaleString("it-IT", { maximumFractionDigits: 0, useGroup
 const $ = id => document.getElementById(id);
 
 function calcola() {
-  const canone = Number($("canone").value);
-  const fee = canone * 0.1;
+  const el = $("canone"), canone = Number(el.value), fee = canone * 0.1;
+  el.style.setProperty("--p", ((canone - el.min) / (el.max - el.min) * 100) + "%");
   $("canone-out").textContent = euro(canone);
   $("c-fee").textContent = euro(fee);
   $("c-net").textContent = euro(canone - fee);
@@ -448,9 +666,13 @@ function calcola() {
 $("canone").addEventListener("input", calcola);
 calcola();
 
+const topbar = $("topbar");
+const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 8);
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
 function aggiornaRuolo() {
-  const proprietario = $("ruolo-proprietario").checked;
-  $("immobili-field").hidden = !proprietario;
+  $("immobili-field").hidden = !$("ruolo-proprietario").checked;
 }
 document.querySelectorAll('input[name="ruolo"]').forEach(r => r.addEventListener("change", aggiornaRuolo));
 document.querySelectorAll("[data-role]").forEach(a => a.addEventListener("click", () => {
