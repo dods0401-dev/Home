@@ -5,20 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Domilis · Case a Milano</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="light">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
 <style>
 /* Layout: intestazione, titolo con filtri, griglia di annunci. Stessi colori e stesso movimento della landing. */
 :root {
-  --bg: #fafaff;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --tint: #f2f3fd;
+  --tint: #f3f5ff;
   --ink: #0f0b4a;
   --muted: #5d5c80;
-  --line: #e3e4f2;
-  --blue: #0fa0f5;
-  --violet: #7c3cf2;
-  --accent: #4b43e6;
-  --accent-soft: #ecebff;
+  --line: #e3e6f6;
+  --blue: #12a4ff;
+  --violet: #8a3df4;
+  --accent: #5a4df0;
+  --accent-soft: #eeecff;
   --panel: #0f0b4a;
   --on-panel: #ffffff;
   --on-panel-muted: #c1bfe8;
@@ -30,35 +31,11 @@
   --glow-b: rgba(124, 60, 242, .18);
   --shadow-sm: 0 1px 2px rgba(15, 11, 74, .05), 0 8px 20px -10px rgba(15, 11, 74, .16);
   --shadow: 0 2px 4px rgba(15, 11, 74, .04), 0 40px 80px -36px rgba(15, 11, 74, .42);
-  --header-bg: rgba(250, 250, 255, .78);
+  --header-bg: rgba(255, 255, 255, .82);
   --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --ease: cubic-bezier(.16, 1, .3, 1);
   --spring: cubic-bezier(.34, 1.56, .64, 1);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0a0923; --surface: #15143c; --tint: #0f0e2d; --ink: #f3f3fd; --muted: #adacce;
-    --line: #2b2a5a; --blue: #4db6ff; --violet: #a880ff; --accent: #9793ff; --accent-soft: #221f5a;
-    --panel: #19176a; --on-panel: #ffffff; --on-panel-muted: #c8c6ee;
-    --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
-    --glow-a: rgba(77, 182, 255, .16); --glow-b: rgba(168, 128, 255, .20);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 20px -10px rgba(0, 0, 0, .55);
-    --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 40px 80px -36px rgba(0, 0, 0, .85);
-    --header-bg: rgba(10, 9, 35, .76);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0a0923; --surface: #15143c; --tint: #0f0e2d; --ink: #f3f3fd; --muted: #adacce;
-  --line: #2b2a5a; --blue: #4db6ff; --violet: #a880ff; --accent: #9793ff; --accent-soft: #221f5a;
-  --panel: #19176a; --on-panel: #ffffff; --on-panel-muted: #c8c6ee;
-  --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
-  --glow-a: rgba(77, 182, 255, .16); --glow-b: rgba(168, 128, 255, .20);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 20px -10px rgba(0, 0, 0, .55);
-  --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 40px 80px -36px rgba(0, 0, 0, .85);
-  --header-bg: rgba(10, 9, 35, .76);
-  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
