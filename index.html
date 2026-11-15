@@ -305,7 +305,7 @@ footer p { max-width: 84ch; }
   .marquee .track { animation: slide 38s linear infinite; }
   .marquee:hover .track { animation-play-state: paused; }
   @keyframes slide { to { transform: translateX(-50%); } }
-  .cta-panel .aura { animation: spin 18s linear infinite; }
+  .final .aura { animation: spin 22s linear infinite; }
   @keyframes spin { to { transform: rotate(1turn); } }
 
   .hero-copy > :not(h1) { animation: up .9s var(--ease) both; animation-delay: calc(var(--i) * 110ms); }
@@ -332,8 +332,6 @@ footer p { max-width: 84ch; }
   .motion [data-reveal].in { opacity: 1; transform: none; transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
   .motion .months i { transform: scaleY(.08); }
   .motion .seen .months i { transform: none; transition: transform .9s var(--spring); transition-delay: calc(.3s + var(--k) * 55ms); }
-  .motion .fan .mini { transform: translate(0, 60px) rotate(0deg); opacity: 0; }
-  .motion .fan.seen .mini { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 1; transition: transform 1s var(--spring), opacity .5s; }
   .tabs.play .tab.on::after { animation: fill 4.8s linear both; }
   .tabs.play.hold .tab.on::after { animation-play-state: paused; }
   @keyframes fill { to { transform: scaleX(1); } }
@@ -342,6 +340,82 @@ footer p { max-width: 84ch; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
   .progress, .orb { display: none; }
+}
+
+/* Pagine impilate: ogni sezione resta ferma mentre la successiva le scorre sopra */
+.page { position: relative; min-height: 100svh; background: var(--bg); display: grid; align-items: center; }
+.page.tinted { background: var(--tint); }
+.page + .page { border-radius: 36px 36px 0 0; box-shadow: 0 -1px 0 var(--line), 0 -28px 60px -28px rgba(8, 6, 40, .45); }
+.page::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #05041a; opacity: calc(var(--out, 0) * .4); pointer-events: none; z-index: 5; }
+.page-in { position: relative; width: 100%; transform-origin: 50% 100%; transform: translateY(calc(var(--out, 0) * -6vh)) scale(calc(1 - var(--out, 0) * .08)); }
+.hero-bg.page { min-height: calc(100svh - 76px); align-items: stretch; }
+.hero-bg .page-in { display: grid; grid-template-rows: 1fr auto; }
+.hero-bg .hero { align-self: center; width: 100%; }
+.stage { transform: translateY(calc(var(--out, 0) * -90px)) rotate(calc(var(--out, 0) * -4deg)); }
+.marquee ul { transform: skewX(var(--skew, 0deg)); transition: transform .4s var(--ease); }
+h2 .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .14em; margin-bottom: -.14em; }
+h2 .w > span { display: inline-block; }
+.phone-wrap { perspective: 1400px; }
+.phone { transform: rotateY(calc((1 - var(--p, 1)) * -32deg)) rotateX(calc((1 - var(--p, 1)) * 12deg)) translateY(calc((1 - var(--p, 1)) * 80px)) scale(calc(.86 + var(--p, 1) * .14)); }
+.mini { transform: translate(calc(var(--x) * var(--p, 1)), calc(var(--y) * var(--p, 1) + (1 - var(--p, 1)) * 70px)) rotate(calc(var(--r) * var(--p, 1))) scale(calc(.8 + var(--p, 1) * .2)); transition: transform .25s ease-out; }
+
+/* Ultima pagina */
+.final { background: var(--panel); color: var(--on-panel); overflow: hidden; align-items: stretch; }
+.final .page-in { display: grid; grid-template-rows: 1fr auto; min-height: 100svh; z-index: 1; }
+.final .aura { position: absolute; left: 50%; top: 45%; width: 130vmax; height: 130vmax; margin: -65vmax 0 0 -65vmax; background: conic-gradient(from 0deg, rgba(15, 160, 245, 0), rgba(15, 160, 245, .5), rgba(124, 60, 242, .65), rgba(15, 160, 245, 0) 70%); filter: blur(80px); opacity: .7; will-change: transform; }
+.final .dots { inset: 0; -webkit-mask: radial-gradient(60% 60% at 50% 40%, #000, transparent 80%); mask: radial-gradient(60% 60% at 50% 40%, #000, transparent 80%); background-image: radial-gradient(rgba(255, 255, 255, .16) 1.2px, transparent 1.2px); }
+.cta { display: grid; gap: 28px; justify-items: center; align-content: center; text-align: center; padding-block: 120px 56px; }
+.final .head { justify-items: center; margin: 0; }
+.final .label { color: #bfe6ff; }
+.final .label b { color: #fff; }
+.final .lead { color: var(--on-panel-muted); }
+.final footer { color: var(--on-panel-muted); padding-block: 8px 36px; }
+.final footer .brand { color: #fff; }
+
+/* Etichette */
+.label b { font: 700 .82rem var(--display); color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.pill { background: none; padding: 0; gap: 8px; font-size: .88rem; }
+.pill.late { background: none; }
+.pill.okp { background: var(--accent-soft); color: var(--accent); padding: 5px 12px 5px 10px; }
+.plusline { margin-top: 4px; }
+
+/* Indice laterale */
+.agenda { position: fixed; z-index: 25; right: max(3px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); display: grid; padding: 6px 0; }
+.agenda::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 17px; border-radius: 999px; background: var(--header-bg); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px var(--line); }
+.agenda button { position: relative; display: flex; align-items: center; justify-content: flex-end; width: 38px; height: 30px; padding: 0 6px 0 0; background: none; border: 0; cursor: pointer; }
+.agenda i { width: 5px; height: 5px; border-radius: 5px; background: var(--muted); opacity: .6; transition: height .5s var(--spring), opacity .3s; }
+.agenda button[aria-current="true"] i { height: 20px; opacity: 1; background: linear-gradient(180deg, var(--blue), var(--violet)); }
+.agenda .t { position: absolute; right: 28px; white-space: nowrap; padding: 7px 13px; border-radius: 999px; background: var(--ink); color: var(--bg); font: 600 .8rem var(--body); opacity: 0; transform: translateX(10px) scale(.92); transform-origin: right; transition: opacity .3s, transform .45s var(--spring); pointer-events: none; }
+.agenda.show button[aria-current="true"] .t, .agenda button:focus-visible .t { opacity: 1; transform: none; }
+@media (hover: hover) { .agenda:hover .t { opacity: 1; transform: none; } .agenda:hover button:not(:hover):not([aria-current="true"]) .t { opacity: .55; } .agenda button:hover i { opacity: 1; } }
+@media (min-width: 900px) { .agenda { right: 18px; } .agenda::before { width: 21px; } .agenda button { width: 44px; height: 34px; padding-right: 7px; } .agenda i { width: 7px; height: 7px; } .agenda button[aria-current="true"] i { height: 24px; } .agenda .t { right: 36px; } }
+
+/* Spaziature su telefono */
+@media (max-width: 600px) {
+  .wrap { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+  .band { padding-block: 84px 64px; }
+  .head { gap: 14px; margin-bottom: 28px; }
+  h1 { font-size: clamp(2.4rem, 11.5vw, 3.2rem); }
+  .hero { padding-block: 20px 36px; gap: 36px; }
+  .hero-copy { gap: 20px; }
+  .actions { flex-direction: column; width: 100%; gap: 10px; }
+  .actions .btn { width: 100%; }
+  .ledger li { padding: 12px 0; }
+  .ledger-foot { padding-top: 14px; }
+  .bento { gap: 12px; }
+  .tab { padding: 16px; column-gap: 14px; }
+  .tab.on { padding-bottom: 24px; }
+  .tab h3 { font-size: 1.12rem; }
+  .tab::after { left: 16px; right: 16px; }
+  .demo { gap: 28px; }
+  .page + .page { border-radius: 28px 28px 0 0; }
+  .cta { padding-block: 96px 40px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .page { position: sticky; }
+  .motion h2 .w > span { transform: translateY(110%) rotate(5deg); }
+  .motion .seen h2 .w > span { transform: none; transition: transform .9s var(--ease); transition-delay: calc(.1s + var(--k) * 60ms); }
 }
 </style>
 </head>
@@ -363,6 +437,14 @@ footer p { max-width: 84ch; }
 
 <div class="progress" id="progress" aria-hidden="true"></div>
 
+<nav class="agenda" id="agenda" aria-label="Indice della pagina">
+  <button type="button" aria-current="true"><span class="t">Inizio</span><i></i></button>
+  <button type="button" aria-current="false"><span class="t">Proprietari</span><i></i></button>
+  <button type="button" aria-current="false"><span class="t">Come funziona</span><i></i></button>
+  <button type="button" aria-current="false"><span class="t">Inquilini</span><i></i></button>
+  <button type="button" aria-current="false"><span class="t">Lista d'attesa</span><i></i></button>
+</nav>
+
 <div class="topbar" id="topbar">
   <header class="wrap top">
     <a class="brand" href="#" aria-label="Domilis, pagina iniziale"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
@@ -376,7 +458,7 @@ footer p { max-width: 84ch; }
 </div>
 
 <main>
-  <div class="hero-bg" id="hero">
+  <div class="page hero-bg" id="hero"><div class="page-in">
     <span class="dots"></span><span class="orb" id="orb"></span>
     <section class="wrap hero">
       <div class="hero-copy">
@@ -424,12 +506,12 @@ footer p { max-width: 84ch; }
         </ul>
       </div>
     </div>
-  </div>
+  </div></div>
 
-  <section class="band" id="proprietari">
-    <div class="wrap">
+  <section class="page band" id="proprietari">
+    <div class="wrap page-in">
       <div class="head row" data-reveal>
-        <p class="label">Per chi affitta</p>
+        <p class="label"><b>01</b>Per chi affitta</p>
         <h2>Un prezzo solo. Dentro c'è tutto.</h2>
         <p class="lead">Tre coperture che oggi compri separate, o non compri affatto.</p>
       </div>
@@ -467,10 +549,10 @@ footer p { max-width: 84ch; }
     </div>
   </section>
 
-  <section class="band tinted" id="come-funziona">
-    <div class="wrap">
+  <section class="page band tinted" id="come-funziona">
+    <div class="wrap page-in">
       <div class="head" data-reveal>
-        <p class="label">Come funziona</p>
+        <p class="label"><b>02</b>Come funziona</p>
         <h2>Tre passi, dal telefono</h2>
       </div>
       <div class="demo" data-reveal>
@@ -479,7 +561,7 @@ footer p { max-width: 84ch; }
           <button class="tab" role="tab" aria-selected="false" aria-controls="s1" id="t1" tabindex="-1"><span class="n">2</span><h3>Scegli l'inquilino</h3><span class="more"><p>Vedi solo candidati con identità e reddito già verificati.</p></span></button>
           <button class="tab" role="tab" aria-selected="false" aria-controls="s2" id="t2" tabindex="-1"><span class="n">3</span><h3>Incassi ogni mese</h3><span class="more"><p>Accredito puntuale sul tuo conto, in ogni caso.</p></span></button>
         </div>
-        <div class="phone">
+        <div class="phone-wrap" data-scrub><div class="phone">
           <div class="screens">
             <div class="screen on" id="s0" role="tabpanel" aria-labelledby="t0">
               <p class="s-title">Nuovo annuncio</p>
@@ -505,21 +587,21 @@ footer p { max-width: 84ch; }
               <p class="line" style="--i:4"><span>Gennaio</span><b class="amt">1.080 €</b></p>
             </div>
           </div>
-        </div>
+        </div></div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="inquilini">
-    <div class="wrap split">
+  <section class="page band" id="inquilini">
+    <div class="wrap split page-in">
       <div class="head" data-reveal>
-        <p class="label">Per chi cerca casa</p>
+        <p class="label"><b>03</b>Per chi cerca casa</p>
         <h2>Entri <span class="hl">senza deposito</span></h2>
         <p class="lead">Case verificate, nessuna commissione di agenzia.</p>
         <a class="btn ghost" href="annunci.html">Guarda le case <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="plusline"><b>Domilis+ in arrivo</b><span>Pulizie</span><span>Benessere</span><span>Utenze e internet</span></p>
       </div>
-      <a class="fan" href="annunci.html" data-watch aria-label="Guarda le case disponibili">
+      <a class="fan" href="annunci.html" data-scrub aria-label="Guarda le case disponibili">
         <span class="mini"><span class="ph"></span><span class="tx"><b>Monolocale</b><span>Isola, Milano</span><strong>1.100 €</strong></span></span>
         <span class="mini"><span class="ph"></span><span class="tx"><b>Trilocale</b><span>NoLo, Milano</span><strong>1.600 €</strong></span></span>
         <span class="mini"><span class="ph"></span><span class="tx"><b>Bilocale luminoso</b><span>Porta Romana, Milano</span><strong>1.450 €</strong></span></span>
@@ -527,14 +609,16 @@ footer p { max-width: 84ch; }
     </div>
   </section>
 
-  <section class="cta-band" id="lista">
-    <div class="wrap">
-      <div class="cta-panel" data-reveal>
-        <span class="aura"></span><span class="dots"></span>
-        <p class="label">Lista d'attesa</p>
-        <h2>Sii tra i primi a Milano</h2>
-        <p class="lead">Lascia la tua email. Ti scriviamo quando apriamo.</p>
-        <form id="waitlist" novalidate>
+  <section class="page final" id="lista">
+    <span class="aura"></span><span class="dots"></span>
+    <div class="page-in">
+      <div class="wrap cta">
+        <div class="head" data-reveal>
+          <p class="label"><b>04</b>Lista d'attesa</p>
+          <h2>Sii tra i primi a Milano</h2>
+          <p class="lead">Lascia la tua email. Ti scriviamo quando apriamo.</p>
+        </div>
+        <form id="waitlist" novalidate data-reveal style="--i:1">
           <fieldset class="seg">
             <label><input type="radio" name="ruolo" id="ruolo-proprietario" value="proprietario" checked>Ho una casa</label>
             <label><input type="radio" name="ruolo" id="ruolo-inquilino" value="inquilino">Cerco casa</label>
@@ -547,17 +631,16 @@ footer p { max-width: 84ch; }
           <p class="note">Gratis e senza impegno. Usiamo la tua email solo per avvisarti del lancio.</p>
         </form>
       </div>
+      <footer class="wrap">
+        <div class="frow">
+          <a class="brand" href="#"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+          <span>Renting made effortless · © 2026 Domilis</span>
+        </div>
+        <p>Domilis è un servizio in fase di lancio. Le coperture saranno prestate tramite un partner assicurativo e valgono per i contratti con inquilini approvati da Domilis, alle condizioni pubblicate prima dell'attivazione. Nomi, case e importi mostrati sono esempi.</p>
+      </footer>
     </div>
   </section>
 </main>
-
-<footer class="wrap">
-  <div class="frow">
-    <a class="brand" href="#"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
-    <span>Renting made effortless · © 2026 Domilis</span>
-  </div>
-  <p>Domilis è un servizio in fase di lancio. Le coperture saranno prestate tramite un partner assicurativo e valgono per i contratti con inquilini approvati da Domilis, alle condizioni pubblicate prima dell'attivazione. Nomi, case e importi mostrati sono esempi.</p>
-</footer>
 
 <script>
 // Indirizzo a cui inviare le iscrizioni (Formspree, Brevo, Tally o un endpoint proprio). Vuoto = anteprima, nessun invio.
@@ -568,21 +651,66 @@ const euro = n => Math.round(n).toLocaleString("it-IT", { useGrouping: "always" 
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const puntatore = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-// Barra di avanzamento e intestazione compatta
-const topbar = $("topbar"), progress = $("progress");
-let inCorso = false;
-const onScroll = () => {
-  if (inCorso) return;
-  inCorso = true;
-  requestAnimationFrame(() => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    topbar.classList.toggle("scrolled", scrollY > 8);
-    progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-    inCorso = false;
+// Pagine impilate, indice laterale e movimento legato allo scorrimento
+const topbar = $("topbar"), progress = $("progress"), agenda = $("agenda");
+const pages = [...document.querySelectorAll(".page")], voci = [...agenda.querySelectorAll("button")];
+const scrub = [...document.querySelectorAll("[data-scrub]")], nastro = document.querySelector(".marquee");
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+let offsets = [], attiva = -1, ultimoY = scrollY, inCorso = false, timerVoce = 0, timerNastro = 0;
+
+function misura() {
+  const vh = innerHeight;
+  let y = document.querySelector("main").offsetTop;
+  offsets = pages.map(p => {
+    const inizio = y;
+    y += p.offsetHeight;
+    // Una pagina più alta dello schermo si ferma quando il suo fondo tocca il fondo dello schermo
+    if (!calm) p.style.top = Math.min(0, vh - p.offsetHeight) + "px";
+    return inizio;
   });
-};
-addEventListener("scroll", onScroll, { passive: true });
-onScroll();
+}
+function aggiorna() {
+  inCorso = false;
+  const vh = innerHeight, max = document.documentElement.scrollHeight - vh, y = scrollY;
+  topbar.classList.toggle("scrolled", y > 8);
+  progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+  let i = 0;
+  offsets.forEach((o, k) => { if (y + vh * 0.45 >= o) i = k; });
+  if (i !== attiva) {
+    attiva = i;
+    voci.forEach((v, k) => v.setAttribute("aria-current", k === i));
+    agenda.classList.add("show");
+    clearTimeout(timerVoce);
+    timerVoce = setTimeout(() => agenda.classList.remove("show"), 1600);
+  }
+  if (calm) return;
+  pages.forEach((p, k) => {
+    const dopo = pages[k + 1];
+    p.style.setProperty("--out", dopo ? clamp((vh - dopo.getBoundingClientRect().top) / vh, 0, 1).toFixed(3) : 0);
+  });
+  scrub.forEach(el => {
+    const k = clamp((vh - el.getBoundingClientRect().top) / (vh * 0.8), 0, 1);
+    el.style.setProperty("--p", (1 - Math.pow(1 - k, 3)).toFixed(3));
+  });
+  nastro.style.setProperty("--skew", clamp((y - ultimoY) * 0.4, -16, 16).toFixed(1) + "deg");
+  ultimoY = y;
+  clearTimeout(timerNastro);
+  timerNastro = setTimeout(() => nastro.style.setProperty("--skew", "0deg"), 120);
+}
+const chiedi = () => { if (!inCorso) { inCorso = true; requestAnimationFrame(aggiorna); } };
+addEventListener("scroll", chiedi, { passive: true });
+addEventListener("resize", () => { misura(); chiedi(); });
+if ("ResizeObserver" in window) { const ro = new ResizeObserver(() => { misura(); chiedi(); }); pages.forEach(p => ro.observe(p)); }
+misura();
+aggiorna();
+
+// Salti rapidi: dall'indice laterale e dai collegamenti interni
+const vaiPagina = i => scrollTo({ top: i ? offsets[i] : 0, behavior: calm ? "auto" : "smooth" });
+voci.forEach((v, i) => v.addEventListener("click", () => vaiPagina(i)));
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+  const id = a.getAttribute("href").slice(1), i = id ? pages.findIndex(p => p.id === id) : 0;
+  if (i >= 0) { e.preventDefault(); vaiPagina(i); }
+}));
 
 function conta(el, attesa, durata, formato) {
   const arrivo = Number(el.dataset.count), t0 = performance.now() + attesa;
@@ -631,6 +759,7 @@ if (!calm) {
     } else spezza(n);
   });
   spezza($("titolo"));
+  document.querySelectorAll("h2").forEach(h => { k = 0; spezza(h); });
 
   conta($("total"), 800, 1500, euro);
 
