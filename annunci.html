@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Domilis · Case a Milano</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<style>
+/* Layout: intestazione, titolo con filtri, griglia di annunci. Stessi colori e stesso movimento della landing. */
+:root {
+  --bg: #fafaff;
+  --surface: #ffffff;
+  --tint: #f2f3fd;
+  --ink: #0f0b4a;
+  --muted: #5d5c80;
+  --line: #e3e4f2;
+  --blue: #0fa0f5;
+  --violet: #7c3cf2;
+  --accent: #4b43e6;
+  --accent-soft: #ecebff;
+  --panel: #0f0b4a;
+  --on-panel: #ffffff;
+  --on-panel-muted: #c1bfe8;
+  --good: #0b7a54;
+  --good-bg: #e1f6ec;
+  --warn: #8a5800;
+  --warn-bg: #fdf0d0;
+  --glow-a: rgba(15, 160, 245, .20);
+  --glow-b: rgba(124, 60, 242, .18);
+  --shadow-sm: 0 1px 2px rgba(15, 11, 74, .05), 0 8px 20px -10px rgba(15, 11, 74, .16);
+  --shadow: 0 2px 4px rgba(15, 11, 74, .04), 0 40px 80px -36px rgba(15, 11, 74, .42);
+  --header-bg: rgba(250, 250, 255, .78);
+  --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0923; --surface: #15143c; --tint: #0f0e2d; --ink: #f3f3fd; --muted: #adacce;
+    --line: #2b2a5a; --blue: #4db6ff; --violet: #a880ff; --accent: #9793ff; --accent-soft: #221f5a;
+    --panel: #19176a; --on-panel: #ffffff; --on-panel-muted: #c8c6ee;
+    --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
+    --glow-a: rgba(77, 182, 255, .16); --glow-b: rgba(168, 128, 255, .20);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 20px -10px rgba(0, 0, 0, .55);
+    --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 40px 80px -36px rgba(0, 0, 0, .85);
+    --header-bg: rgba(10, 9, 35, .76);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0923; --surface: #15143c; --tint: #0f0e2d; --ink: #f3f3fd; --muted: #adacce;
+  --line: #2b2a5a; --blue: #4db6ff; --violet: #a880ff; --accent: #9793ff; --accent-soft: #221f5a;
+  --panel: #19176a; --on-panel: #ffffff; --on-panel-muted: #c8c6ee;
+  --good: #62d8a8; --good-bg: #10392d; --warn: #f3c768; --warn-bg: #3c2e0b;
+  --glow-a: rgba(77, 182, 255, .16); --glow-b: rgba(168, 128, 255, .20);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 20px -10px rgba(0, 0, 0, .55);
+  --shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 40px 80px -36px rgba(0, 0, 0, .85);
+  --header-bg: rgba(10, 9, 35, .76);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+h1, h3 { font-family: var(--display); letter-spacing: -.03em; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 5.4vw, 3.6rem); font-weight: 800; line-height: 1.05; }
+h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.25; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
+.grad { background: linear-gradient(100deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.wrap { max-width: 1120px; margin-inline: auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--header-bg); -webkit-backdrop-filter: saturate(170%) blur(16px); backdrop-filter: saturate(170%) blur(16px); box-shadow: 0 1px 0 var(--line); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 62px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.6rem/1 var(--display); letter-spacing: -.04em; }
+.brand svg { width: 36px; height: 36px; flex: none; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; border: 0; font: 600 .94rem/1 var(--body); text-decoration: none; cursor: pointer; white-space: nowrap; transition: transform .35s var(--spring), box-shadow .3s ease; }
+.btn.primary { background: linear-gradient(100deg, var(--blue), var(--violet)); color: #fff; box-shadow: 0 14px 30px -14px var(--violet), inset 0 1px 0 rgba(255, 255, 255, .28); }
+.btn.primary:hover { transform: translateY(-2px) scale(1.02); }
+.btn:active { transform: scale(.97); }
+
+.intro { display: grid; gap: 18px; padding-block: clamp(36px, 6vw, 72px) 28px; }
+.lead { color: var(--muted); font-size: clamp(1.05rem, 1.6vw, 1.2rem); max-width: 52ch; }
+.demo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; padding: 8px 16px; border-radius: 999px; background: var(--warn-bg); color: var(--warn); font-size: .86rem; font-weight: 600; }
+.demo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 20px; padding-block: 10px 28px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--surface); color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); font: 600 .92rem var(--body); cursor: pointer; transition: background .25s, color .25s, transform .35s var(--spring); }
+.chips button:hover { transform: translateY(-2px); color: var(--ink); }
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--bg); box-shadow: none; }
+.sort { display: flex; align-items: center; gap: 10px; font-size: .92rem; color: var(--muted); }
+.sort select { min-height: 42px; padding: 0 14px; border-radius: 999px; border: 0; box-shadow: inset 0 0 0 1px var(--line); background: var(--surface); color: var(--ink); font: 600 .92rem var(--body); }
+.count { font-size: .9rem; color: var(--muted); padding-bottom: 16px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; padding-bottom: clamp(56px, 8vw, 104px); }
+.card { background: var(--surface); border-radius: 26px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; min-width: 0; box-shadow: inset 0 0 0 1px var(--line), var(--shadow-sm); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+.card:hover { transform: translateY(-8px); box-shadow: inset 0 0 0 1px var(--line), var(--shadow); }
+.photo { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+.photo > svg { display: block; width: 100%; height: 100%; transition: transform .9s var(--ease); }
+.card:hover .photo > svg { transform: scale(1.06); }
+.badges { position: absolute; left: 14px; top: 14px; display: flex; gap: 8px; }
+.badge { padding: 6px 12px; border-radius: 999px; background: #ffffff; color: #0f0b4a; font-size: .76rem; font-weight: 600; box-shadow: 0 4px 12px -4px rgba(15, 11, 74, .4); }
+.badge.dark { background: #0f0b4a; color: #ffffff; }
+.body { padding: 20px 22px 22px; display: grid; gap: 14px; align-content: start; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.where { color: var(--muted); font-size: .92rem; }
+.rent { font: 800 1.4rem/1 var(--display); letter-spacing: -.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rent small { font: 500 .8rem var(--body); color: var(--muted); letter-spacing: 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.facts li { background: var(--tint); border-radius: 10px; padding: 5px 11px; font-size: .84rem; font-weight: 500; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--muted); }
+.foot b { color: var(--good); font-weight: 600; }
+.foot a { font-weight: 600; color: var(--accent); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 48px 0; }
+footer { padding-block: 8px 48px; color: var(--muted); font-size: .84rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro > * { animation: up .9s var(--ease) both; animation-delay: calc(var(--i) * 90ms); }
+  .card { animation: up .8s var(--ease) both; animation-delay: calc(.25s + var(--i) * 70ms); }
+  @keyframes up { from { transform: translateY(28px); opacity: 0; } }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="dg" x1="8" y1="96" x2="108" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0aa8ff"/><stop offset=".5" stop-color="#3d6cf7"/><stop offset="1" stop-color="#8b3cf4"/>
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 120 120">
+      <path d="M98 72V49L60 20 21 49v40" fill="none" stroke="url(#dg)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 89l22-2 30-15q5-2 5 4v19q0 4-4 4H24q-10 0-10-10z" fill="url(#dg)" stroke="url(#dg)" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+<div class="topbar">
+  <header class="wrap top">
+    <a class="brand" href="index.html" aria-label="Domilis, pagina iniziale"><svg aria-hidden="true"><use href="#mark"/></svg>Domilis</a>
+    <a class="btn primary" href="index.html#lista">Entra in lista</a>
+  </header>
+</div>
+
+<main class="wrap">
+  <div class="intro">
+    <p class="demo" style="--i:0">Annunci di prova: dati dimostrativi, non immobili reali</p>
+    <h1 style="--i:1">Case a Milano, <span class="grad">senza deposito</span></h1>
+    <p class="lead" style="--i:2">Tutte verificate, nessuna commissione di agenzia.</p>
+  </div>
+  <div class="bar">
+    <div class="chips" role="group" aria-label="Filtra per numero di locali">
+      <button type="button" data-f="0" aria-pressed="true">Tutte</button>
+      <button type="button" data-f="1" aria-pressed="false">Monolocali</button>
+      <button type="button" data-f="2" aria-pressed="false">Bilocali</button>
+      <button type="button" data-f="3" aria-pressed="false">Trilocali e oltre</button>
+    </div>
+    <label class="sort">Ordina <select id="ordine"><option value="basso">Canone più basso</option><option value="alto">Canone più alto</option><option value="grande">Più grandi</option></select></label>
+  </div>
+  <p class="count" id="conta" role="status"></p>
+  <div class="grid" id="griglia"></div>
+</main>
+
+<footer class="wrap"><p>Domilis è un servizio in fase di lancio. Gli annunci in questa pagina sono esempi creati per provare il prodotto.</p></footer>
+
+<script type="application/json" id="annunci-data">
+[
+ {
+  "id": 1,
+  "titolo": "Bilocale luminoso",
+  "zona": "Porta Romana",
+  "canone": 1450,
+  "mq": 55,
+  "locali": 2,
+  "piano": "2° piano",
+  "arredato": true,
+  "contratto": "3+2",
+  "da": "Subito"
+ },
+ {
+  "id": 2,
+  "titolo": "Monolocale con soppalco",
+  "zona": "Isola",
+  "canone": 1100,
+  "mq": 35,
+  "locali": 1,
+  "piano": "4° piano",
+  "arredato": true,
+  "contratto": "Transitorio",
+  "da": "1 dicembre"
+ },
+ {
+  "id": 3,
+  "titolo": "Trilocale con balcone",
+  "zona": "NoLo",
+  "canone": 1600,
+  "mq": 80,
+  "locali": 3,
+  "piano": "3° piano",
+  "arredato": false,
+  "contratto": "4+4",
+  "da": "Subito"
+ },
+ {
+  "id": 4,
+  "titolo": "Bilocale vicino al Politecnico",
+  "zona": "Città Studi",
+  "canone": 1250,
+  "mq": 50,
+  "locali": 2,
+  "piano": "1° piano",
+  "arredato": true,
+  "contratto": "Studenti",
+  "da": "1 gennaio"
+ },
+ {
+  "id": 5,
+  "titolo": "Bilocale di ringhiera",
+  "zona": "Navigli",
+  "canone": 1550,
+  "mq": 60,
+  "locali": 2,
+  "piano": "2° piano",
+  "arredato": true,
+  "contratto": "3+2",
+  "da": "15 dicembre"
+ },
+ {
+  "id": 6,
+  "titolo": "Monolocale ristrutturato",
+  "zona": "Bicocca",
+  "canone": 850,
+  "mq": 30,
+  "locali": 1,
+  "piano": "5° piano",
+  "arredato": true,
+  "contratto": "Studenti",
+  "da": "Subito"
+ },
+ {
+  "id": 7,
+  "titolo": "Trilocale con doppi servizi",
+  "zona": "Lambrate",
+  "canone": 1700,
+  "mq": 85,
+  "locali": 3,
+  "piano": "6° piano",
+  "arredato": false,
+  "contratto": "4+4",
+  "da": "1 febbraio"
+ },
+ {
+  "id": 8,
+  "titolo": "Bilocale d'epoca",
+  "zona": "Porta Venezia",
+  "canone": 1800,
+  "mq": 65,
+  "locali": 2,
+  "piano": "3° piano",
+  "arredato": true,
+  "contratto": "3+2",
+  "da": "Subito"
+ },
+ {
+  "id": 9,
+  "titolo": "Bilocale con terrazzo",
+  "zona": "Bovisa",
+  "canone": 1050,
+  "mq": 48,
+  "locali": 2,
+  "piano": "7° piano",
+  "arredato": false,
+  "contratto": "3+2",
+  "da": "1 gennaio"
+ },
+ {
+  "id": 10,
+  "titolo": "Quadrilocale con box",
+  "zona": "San Siro",
+  "canone": 2200,
+  "mq": 110,
+  "locali": 4,
+  "piano": "2° piano",
+  "arredato": false,
+  "contratto": "4+4",
+  "da": "1 marzo"
+ },
+ {
+  "id": 11,
+  "titolo": "Bilocale nuovo",
+  "zona": "Dergano",
+  "canone": 1150,
+  "mq": 52,
+  "locali": 2,
+  "piano": "Piano terra",
+  "arredato": true,
+  "contratto": "Transitorio",
+  "da": "Subito"
+ },
+ {
+  "id": 12,
+  "titolo": "Trilocale sul parco",
+  "zona": "Corvetto",
+  "canone": 1300,
+  "mq": 75,
+  "locali": 3,
+  "piano": "4° piano",
+  "arredato": true,
+  "contratto": "3+2",
+  "da": "15 gennaio"
+ }
+]
+</script>
+<script>
+const annunci = JSON.parse(document.getElementById("annunci-data").textContent);
+const euro = n => n.toLocaleString("it-IT", { useGrouping: "always" }) + " €";
+const tinte = [["#e9ecff", "#d9d4fb", "#2f7df6", "#7c3cf2"], ["#e6f6ff", "#cfe6fb", "#0fa0f5", "#4b43e6"], ["#f3e9ff", "#e2d3fb", "#7c3cf2", "#c04bd8"], ["#e8f7f1", "#cfeee2", "#1aa77c", "#0fa0f5"]];
+
+// Illustrazione segnaposto: una stanza disegnata, con colori diversi per ogni annuncio.
+function stanza(a) {
+  const [w1, w2, s1, s2] = tinte[a.id % tinte.length], g = "g" + a.id, flip = a.id % 2 ? "" : ' transform="translate(480 0) scale(-1 1)"';
+  return `<svg viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="${g}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${w1}"/><stop offset="1" stop-color="${w2}"/></linearGradient>
+    <linearGradient id="${g}s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${s1}"/><stop offset="1" stop-color="${s2}"/></linearGradient></defs>
+    <rect width="480" height="300" fill="url(#${g}w)"/><rect y="232" width="480" height="68" fill="#c9b79f"/><rect y="232" width="480" height="5" fill="#b7a48b"/>
+    <g${flip}><rect x="56" y="44" width="150" height="130" rx="8" fill="#fff"/><rect x="64" y="52" width="134" height="114" rx="4" fill="#bfe4ff"/>
+    <path d="M64 140l30-26 26 18 34-30 44 34v30H64z" fill="#a9bdf0"/><rect x="129" y="52" width="4" height="114" fill="#fff"/><rect x="64" y="107" width="134" height="4" fill="#fff"/>
+    <rect x="252" y="62" width="62" height="78" rx="6" fill="#fff"/><circle cx="283" cy="94" r="16" fill="#ffc86b"/>
+    <rect x="228" y="170" width="200" height="56" rx="16" fill="url(#${g}s)"/><rect x="216" y="188" width="32" height="50" rx="12" fill="${s1}"/><rect x="408" y="188" width="32" height="50" rx="12" fill="${s2}"/>
+    <rect x="244" y="200" width="168" height="34" rx="10" fill="${s1}" opacity=".75"/><rect x="262" y="176" width="56" height="34" rx="10" fill="#fff" opacity=".9"/>
+    <rect x="112" y="204" width="44" height="42" rx="8" fill="#fff"/><path d="M134 204c-4-30-26-38-30-60 18 6 28 22 30 40 0-26 12-44 30-52-2 28-14 44-24 72z" fill="#2fa87a"/></g></svg>`;
+}
+
+let filtro = 0;
+function mostra() {
+  const ordine = document.getElementById("ordine").value;
+  const lista = annunci.filter(a => !filtro || (filtro === 3 ? a.locali >= 3 : a.locali === filtro))
+    .sort((a, b) => ordine === "basso" ? a.canone - b.canone : ordine === "alto" ? b.canone - a.canone : b.mq - a.mq);
+  document.getElementById("conta").textContent = lista.length === 1 ? "1 casa" : lista.length + " case";
+  document.getElementById("griglia").innerHTML = lista.length ? lista.map((a, i) => `
+    <article class="card" style="--i:${i}">
+      <div class="photo">${stanza(a)}<div class="badges"><span class="badge">Verificato</span><span class="badge dark">Zero deposito</span></div></div>
+      <div class="body">
+        <div class="row"><div><h3>${a.titolo}</h3><p class="where">${a.zona}, Milano</p></div><p class="rent">${euro(a.canone)} <small>al mese</small></p></div>
+        <ul class="facts"><li>${a.mq} m²</li><li>${a.piano}</li><li>${a.arredato ? "Arredato" : "Non arredato"}</li><li>${a.contratto}</li></ul>
+        <p class="foot"><span>Da: <b>${a.da}</b></span><a href="index.html#lista">Mi interessa</a></p>
+      </div>
+    </article>`).join("") : '<p class="empty">Nessuna casa con questo filtro.</p>';
+}
+document.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => {
+  filtro = Number(b.dataset.f);
+  document.querySelectorAll(".chips button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  mostra();
+}));
+document.getElementById("ordine").addEventListener("change", mostra);
+mostra();
+</script>
+</body>
+</html>
