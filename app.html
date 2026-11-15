@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Domilis App</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="light">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<style>
+/* Layout: un'app a schermo intero su telefono, dentro una cornice su schermi larghi.
+   Barra in alto, vista che scorre, barra di navigazione in basso, pannelli che salgono dal fondo. Tema chiaro, colori del logo. */
+:root {
+  --bg: #f5f6fd;
+  --surface: #ffffff;
+  --tint: #eef0fc;
+  --ink: #0f0b4a;
+  --muted: #65648a;
+  --line: #e4e6f5;
+  --blue: #12a4ff;
+  --violet: #8a3df4;
+  --accent: #5a4df0;
+  --accent-soft: #eeecff;
+  --good: #0b7a54;
+  --good-bg: #dff5ea;
+  --warn: #8a5800;
+  --warn-bg: #fdefcc;
+  --shadow-sm: 0 1px 2px rgba(15, 11, 74, .05), 0 10px 24px -14px rgba(15, 11, 74, .2);
+  --shadow: 0 30px 70px -30px rgba(15, 11, 74, .5);
+  --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --grad: linear-gradient(135deg, var(--blue), #4f6cf7 55%, var(--violet));
+  color-scheme: light;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--tint); color: var(--ink); font: 400 15px/1.45 var(--body); -webkit-font-smoothing: antialiased; overflow: hidden; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; padding: 0; }
+h1, h2, h3, .num { font-family: var(--display); letter-spacing: -.025em; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 10px; }
+svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+.device { height: 100%; display: grid; place-items: center; }
+.app { position: relative; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+@media (min-width: 560px) and (min-height: 700px) {
+  .device { padding: 20px; }
+  .app { width: 392px; height: min(840px, 100%); border-radius: 44px; box-shadow: var(--shadow), 0 0 0 10px var(--ink); }
+}
+
+/* Barra in alto */
+.bar { display: flex; align-items: center; gap: 10px; padding: 14px max(18px, env(safe-area-inset-right, 0px)) 10px max(18px, env(safe-area-inset-left, 0px)); flex: none; }
+.bar svg.mark { width: 30px; height: 30px; flex: none; }
+.bar h1 { font-size: 1.25rem; font-weight: 800; flex: 1; min-width: 0; }
+.bar h1 span { display: inline-block; }
+.demo { font-size: .66rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); background: var(--warn-bg); border-radius: 999px; padding: 4px 9px; }
+.bell { position: relative; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); display: grid; place-items: center; }
+.bell::after { content: ""; position: absolute; right: 10px; top: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 0 2px var(--surface); }
+
+/* Viste */
+.views { position: relative; flex: 1; min-height: 0; }
+.view { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px max(18px, env(safe-area-inset-right, 0px)) 28px max(18px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; opacity: 0; transform: translateX(calc(var(--dir, 1) * 28px)); pointer-events: none; transition: opacity .25s ease, transform .5s var(--ease); scrollbar-width: none; }
+.view::-webkit-scrollbar { display: none; }
+.view.on { opacity: 1; transform: none; pointer-events: auto; }
+.view > *, .sheet > * { flex: none; }
+.sec { display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; }
+.sec h2 { font-size: 1.05rem; font-weight: 700; }
+.sec span, .sec button { font-size: .82rem; color: var(--accent); font-weight: 600; }
+.card { background: var(--surface); border-radius: 22px; padding: 18px; box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+button.card { display: block; width: 100%; text-align: left; transition: transform .35s var(--spring); }
+button.card.row { display: flex; }
+button.card.lst { display: grid; }
+button.card:active, .press:active { transform: scale(.97); }
+.muted { color: var(--muted); }
+.small { font-size: .82rem; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row > .grow { flex: 1; min-width: 0; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: .74rem; font-weight: 600; border-radius: 999px; padding: 4px 10px; white-space: nowrap; background: var(--good-bg); color: var(--good); }
+.tag.brand { background: var(--accent-soft); color: var(--accent); }
+.tag.warn { background: var(--warn-bg); color: var(--warn); }
+.tag.dark { background: var(--ink); color: #fff; }
+.tag.glass { background: rgba(255, 255, 255, .22); color: #fff; }
+.tile { width: 44px; height: 44px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
+.av { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font: 700 .9rem var(--display); flex: none; }
+
+/* Scheda accredito */
+.hero { position: relative; overflow: hidden; border-radius: 26px; padding: 20px; color: #fff; background: var(--grad); box-shadow: 0 24px 40px -24px var(--violet); display: grid; gap: 4px; }
+.hero::before { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -120px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, .35), transparent); }
+.hero > * { position: relative; }
+.hero .num { font-size: 2.7rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.hero p { color: rgba(255, 255, 255, .88); font-size: .88rem; }
+.hero .row { margin-top: 12px; justify-content: space-between; }
+.months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; align-items: end; height: 74px; margin-top: 14px; }
+.months i { height: 100%; border-radius: 6px 6px 3px 3px; background: var(--tint); transform-origin: bottom; }
+.months i.cov { background: linear-gradient(180deg, var(--violet), var(--blue)); }
+.months i.next { background: repeating-linear-gradient(135deg, var(--tint) 0 4px, var(--surface) 4px 8px); box-shadow: inset 0 0 0 1px var(--line); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: .76rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend span::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--tint); box-shadow: inset 0 0 0 1px var(--line); }
+.legend span.cov::before { background: linear-gradient(180deg, var(--violet), var(--blue)); box-shadow: none; }
+.quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.quick button { display: grid; gap: 8px; justify-items: center; padding: 14px 6px; background: var(--surface); border-radius: 18px; box-shadow: inset 0 0 0 1px var(--line); font-size: .78rem; font-weight: 600; transition: transform .35s var(--spring); }
+.quick .tile { width: 40px; height: 40px; }
+.list { display: grid; }
+.list li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.list li:first-child { border-top: 0; padding-top: 0; }
+.list li:last-child { padding-bottom: 0; }
+.list b { display: block; font-weight: 600; }
+.list .amt { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Annunci */
+.photo { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; background: linear-gradient(135deg, var(--c1, #cfe6fb), var(--c2, #c2a8fb)); overflow: hidden; }
+.photo::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -55%; height: 100%; border-radius: 50%; background: rgba(255, 255, 255, .3); }
+.photo .tags { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; z-index: 1; }
+.lst { display: grid; gap: 12px; padding: 12px; }
+.lst .row { padding: 0 6px 6px; align-items: flex-start; }
+.lst h3 { font-size: 1.02rem; font-weight: 700; }
+.price { font: 800 1.15rem var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.price small { font: 500 .72rem var(--body); color: var(--muted); }
+.chips { display: flex; gap: 8px; overflow-x: auto; margin: 0 -18px; padding: 2px 18px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { flex: none; min-height: 38px; padding: 0 16px; border-radius: 999px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); font-weight: 600; font-size: .86rem; color: var(--muted); transition: background .25s, color .25s, transform .35s var(--spring); }
+.chips button[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: none; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.facts li { background: var(--tint); border-radius: 9px; padding: 4px 10px; font-size: .78rem; font-weight: 500; }
+.search { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: 16px; padding: 0 14px; min-height: 48px; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); }
+
+.btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 52px; border-radius: 16px; background: var(--grad); color: #fff; font-weight: 600; box-shadow: 0 16px 28px -16px var(--violet); transition: transform .35s var(--spring), opacity .2s; }
+.btn.ghost { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn:active { transform: scale(.97); }
+.btn[disabled] { opacity: .6; }
+.fab { position: absolute; right: max(18px, env(safe-area-inset-right, 0px)); bottom: 16px; z-index: 4; display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 0 20px 0 16px; border-radius: 999px; background: var(--grad); color: #fff; font-weight: 600; box-shadow: 0 18px 30px -14px var(--violet); transform: scale(0); transition: transform .5s var(--spring); }
+.fab.on { transform: none; }
+.fab:active { transform: scale(.94); }
+
+/* Interruttori e selettori */
+.sw { position: relative; width: 50px; height: 30px; border-radius: 999px; background: var(--line); transition: background .3s; flex: none; }
+.sw::after { content: ""; position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(15, 11, 74, .3); transition: transform .45s var(--spring); }
+.sw[aria-checked="true"] { background: var(--accent); }
+.sw[aria-checked="true"]::after { transform: translateX(20px); }
+.seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; background: var(--tint); border-radius: 14px; }
+.seg::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 11px; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .5s var(--ease); }
+.seg[data-on="1"]::before { transform: translateX(100%); }
+.seg button { position: relative; min-height: 42px; font-weight: 600; font-size: .9rem; color: var(--muted); transition: color .3s; }
+.seg button[aria-pressed="true"] { color: var(--ink); }
+.steps { display: grid; gap: 0; }
+.steps li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; }
+.steps li:last-child { padding-bottom: 0; }
+.steps li::before { content: ""; width: 22px; height: 22px; border-radius: 50%; background: var(--good); flex: none; margin-top: 1px; box-shadow: inset 0 0 0 6px var(--good-bg); }
+.steps li.todo::before { background: var(--line); box-shadow: inset 0 0 0 6px var(--tint); }
+.steps li::after { content: ""; position: absolute; left: 10px; top: 25px; bottom: 2px; width: 2px; background: var(--line); }
+.steps li:last-child::after { display: none; }
+.steps b { display: block; font-weight: 600; }
+
+/* Navigazione in basso */
+.tabs { position: relative; flex: none; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); box-shadow: 0 -1px 0 var(--line); padding: 8px max(10px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); }
+.tabs .ind { position: absolute; left: max(10px, env(safe-area-inset-left, 0px)); top: 8px; width: calc((100% - 2 * max(10px, env(safe-area-inset-left, 0px))) / 4); height: 52px; transform: translateX(calc(var(--at, 0) * 100%)); transition: transform .55s var(--spring); pointer-events: none; display: grid; place-items: center; }
+.tabs .ind::before { content: ""; width: 78%; height: 100%; border-radius: 18px; background: var(--accent-soft); }
+.tabs button { position: relative; display: grid; gap: 3px; justify-items: center; align-content: center; height: 52px; font-size: .68rem; font-weight: 600; color: var(--muted); transition: color .3s; }
+.tabs button svg { transition: transform .5s var(--spring); }
+.tabs button[aria-current="true"] { color: var(--accent); }
+.tabs button[aria-current="true"] svg { transform: translateY(-1px) scale(1.12); }
+
+/* Pannello dal basso */
+.scrim { position: absolute; inset: 0; z-index: 10; background: rgba(15, 11, 74, .4); opacity: 0; pointer-events: none; transition: opacity .35s; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 11; max-height: 88%; overflow-y: auto; background: var(--surface); border-radius: 28px 28px 0 0; padding: 10px max(20px, env(safe-area-inset-right, 0px)) calc(22px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; transform: translateY(105%); transition: transform .6s var(--ease); box-shadow: 0 -30px 60px -30px rgba(15, 11, 74, .5); }
+.sheet::before { content: ""; align-self: center; flex: none; width: 40px; height: 5px; border-radius: 5px; background: var(--line); }
+.app.sheet-on .scrim { opacity: 1; pointer-events: auto; }
+.app.sheet-on .sheet { transform: none; }
+.sheet h2 { font-size: 1.35rem; font-weight: 800; }
+.field { display: grid; gap: 6px; }
+.field > span { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.field input[type=text], .field textarea { width: 100%; min-height: 48px; padding: 12px 14px; border-radius: 14px; border: 0; box-shadow: inset 0 0 0 1.5px var(--line); background: var(--bg); outline: none; resize: none; }
+.field input[type=text]:focus, .field textarea:focus { box-shadow: inset 0 0 0 2px var(--accent); }
+input[type=range] { --p: 25%; -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; }
+input[type=range]::-webkit-slider-runnable-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, var(--blue), var(--violet)) 0 / var(--p) 100% no-repeat, var(--line); }
+input[type=range]::-moz-range-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, var(--blue), var(--violet)) 0 / var(--p) 100% no-repeat, var(--line); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -9px; border-radius: 50%; background: #fff; border: 3px solid var(--accent); box-shadow: 0 4px 10px -2px rgba(15, 11, 74, .4); }
+input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 3px solid var(--accent); }
+.calc { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; background: var(--accent-soft); border-radius: 16px; padding: 14px 16px; }
+.calc .num { font-size: 1.5rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+.checks li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.checks li:first-child { border-top: 0; }
+.checks .ok { width: 26px; height: 26px; border-radius: 50%; background: var(--good-bg); color: var(--good); display: grid; place-items: center; flex: none; transform: scale(0); }
+.checks .ok svg { width: 16px; height: 16px; }
+.checks li.done .ok { transform: none; transition: transform .5s var(--spring); }
+.checks .spin { width: 22px; height: 22px; margin: 2px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--accent); flex: none; display: none; }
+.checks li.run .spin { display: block; }
+.checks li.run .ok { display: none; }
+.done-mark { justify-self: center; align-self: center; width: 84px; height: 84px; border-radius: 50%; background: var(--grad); color: #fff; display: grid; place-items: center; box-shadow: 0 20px 34px -16px var(--violet); }
+.done-mark svg { width: 40px; height: 40px; stroke-width: 2.6; }
+.center { text-align: center; justify-items: center; }
+
+/* Avviso */
+.toast { position: absolute; left: 50%; bottom: 96px; z-index: 20; transform: translate(-50%, 30px) scale(.9); opacity: 0; background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 999px; font-size: .86rem; font-weight: 600; white-space: nowrap; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; pointer-events: none; transition: transform .5s var(--spring), opacity .3s; }
+.toast.on { transform: translate(-50%, 0); opacity: 1; }
+
+/* Ingresso */
+.splash { position: absolute; inset: 0; z-index: 30; background: var(--grad); color: #fff; display: grid; align-content: center; justify-items: center; gap: 14px; padding: 32px max(26px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) max(26px, env(safe-area-inset-left, 0px)); text-align: center; transition: transform .8s var(--ease), opacity .5s .2s; }
+.splash.off { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+.splash .logo { width: 96px; height: 96px; border-radius: 28px; background: #fff; display: grid; place-items: center; box-shadow: 0 30px 50px -24px rgba(15, 11, 74, .6); }
+.splash .logo svg { width: 58px; height: 58px; }
+.splash h2 { font-size: 2.3rem; font-weight: 800; letter-spacing: -.04em; margin-top: 8px; }
+.splash p { color: rgba(255, 255, 255, .9); max-width: 26ch; }
+.splash .choose { display: grid; gap: 10px; width: 100%; max-width: 320px; margin-top: 22px; }
+.splash .choose button { min-height: 58px; border-radius: 18px; background: #fff; color: var(--ink); font-weight: 600; font-size: 1.02rem; box-shadow: 0 18px 30px -18px rgba(15, 11, 74, .7); transition: transform .35s var(--spring); }
+.splash .choose button + button { background: rgba(255, 255, 255, .18); color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .6); }
+.splash .choose button:active { transform: scale(.96); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .view.on > * { animation: up .6s var(--ease) both; animation-delay: calc(var(--n, 0) * 60ms + 60ms); }
+  .view.on > :nth-child(2) { --n: 1; } .view.on > :nth-child(3) { --n: 2; } .view.on > :nth-child(4) { --n: 3; } .view.on > :nth-child(5) { --n: 4; } .view.on > :nth-child(6) { --n: 5; } .view.on > :nth-child(n+7) { --n: 6; }
+  @keyframes up { from { transform: translateY(22px); opacity: 0; } }
+  .view.on .months i { animation: grow .8s var(--spring) both; animation-delay: calc(.25s + var(--k) * 45ms); }
+  @keyframes grow { from { transform: scaleY(.05); } }
+  .splash .logo { animation: pop .9s var(--spring) both; }
+  .splash h2, .splash p, .splash .choose { animation: up .8s var(--ease) both; }
+  .splash h2 { animation-delay: .25s; } .splash p { animation-delay: .35s; } .splash .choose { animation-delay: .5s; }
+  @keyframes pop { from { transform: scale(.3) rotate(-20deg); opacity: 0; } }
+  .checks .spin { animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(1turn); } }
+  .done-mark { animation: pop .8s var(--spring) both; }
+  .bar h1 span { animation: up .5s var(--ease) both; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="dg" x1="8" y1="96" x2="108" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0aa8ff"/><stop offset=".5" stop-color="#3d6cf7"/><stop offset="1" stop-color="#8b3cf4"/>
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 120 120">
+      <path d="M98 72V49L60 20 21 49v40" fill="none" stroke="url(#dg)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 89l22-2 30-15q5-2 5 4v19q0 4-4 4H24q-10 0-10-10z" fill="url(#dg)" stroke="url(#dg)" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v8a2 2 0 0 1-2 2h-4v-6h-6v6H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-build" viewBox="0 0 24 24"><path d="M4 21V6l8-3v18M12 9l8 3v9M2 21h20M7.500 9v.01M7.500 13v.01M7.500 17v.01M16 15v.01M16 18v.01"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20a6.500 6.500 0 0 1 13 0M16 4.800a3.500 3.500 0 0 1 0 6.400M18.500 14.500a6 6 0 0 1 3 5.500"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.500"/><path d="M11.500 11.500L20 3M16 7l3 3"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.800 4.700L18.500 9.500l-4.700 1.800L12 16l-1.800-4.700L5.500 9.500l4.700-1.800zM18.500 15.500l.800 2.200 2.200.800-2.200.800-.800 2.200-.800-2.200-2.200-.800 2.200-.800z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.500 6.500a4 4 0 0 0 5 5L11 20a2.100 2.100 0 0 1-3-3l8.500-8.500a4 4 0 0 0-2-2z"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM14 3v5h5M9 13h6M9 17h4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.500 2h-15zM10 20a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.500-3.200 7.800-8 9-4.800-1.200-8-4.500-8-9V6zM8.500 12l2.500 2.500 4.500-4.500"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L5 13.500h6L10 22l9-12h-6.500z"/></symbol>
+    <symbol id="i-gym" viewBox="0 0 24 24"><path d="M6.500 6.500v11M17.500 6.500v11M3.500 9v6M20.500 9v6M6.500 12h11"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  </defs>
+</svg>
+
+<div class="device">
+<div class="app" id="app">
+
+  <header class="bar">
+    <svg class="mark" aria-hidden="true"><use href="#mark"/></svg>
+    <h1 id="titolo"><span>Domilis</span></h1>
+    <span class="demo">Demo</span>
+    <button class="bell press" id="campanella" aria-label="Notifiche"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg></button>
+  </header>
+
+  <main class="views" id="views">
+
+    <!-- PROPRIETARIO -->
+    <section class="view" id="o-home" aria-label="Home">
+      <div class="hero">
+        <p>Prossimo accredito · 5 maggio</p>
+        <p class="num" data-count="1080">1.080 €</p>
+        <p>Bilocale · Porta Romana</p>
+        <div class="row"><span class="tag glass"><svg class="i" style="width:14px;height:14px" aria-hidden="true"><use href="#i-shield"/></svg>Garantito da Domilis</span><span class="small" style="color:#fff">Canone 1.200 € − 10%</span></div>
+      </div>
+      <div class="quick">
+        <button class="press" data-sheet="nuova"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></span>Nuovo annuncio</button>
+        <button class="press" data-sheet="problema"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-wrench"/></svg></span>Segnala</button>
+        <button class="press" data-sheet="documenti"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span>Documenti</button>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><h2 style="font-size:1.05rem">I tuoi canoni 2027</h2><span class="num" style="font-weight:800" data-count="4320">4.320 €</span></div>
+        <div class="months" aria-hidden="true">
+          <i style="--k:0"></i><i style="--k:1"></i><i class="cov" style="--k:2"></i><i style="--k:3"></i><i class="next" style="--k:4"></i><i class="next" style="--k:5"></i><i class="next" style="--k:6"></i><i class="next" style="--k:7"></i><i class="next" style="--k:8"></i><i class="next" style="--k:9"></i><i class="next" style="--k:10"></i><i class="next" style="--k:11"></i>
+        </div>
+        <div class="legend"><span>Pagato dall'inquilino</span><span class="cov">Pagato da Domilis</span></div>
+      </div>
+      <div class="sec"><h2>Ultimi movimenti</h2></div>
+      <div class="card">
+        <ul class="list">
+          <li><span class="tile" style="background:var(--good-bg);color:var(--good)"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span><div class="grow"><b>Canone di aprile</b><span class="small muted">Accreditato il 5 aprile</span></div><span class="amt">+1.080 €</span></li>
+          <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><div class="grow"><b>Canone di marzo</b><span class="small muted">Inquilino in ritardo · pagato da Domilis</span></div><span class="amt">+1.080 €</span></li>
+          <li><span class="tile" style="background:var(--warn-bg);color:var(--warn)"><svg class="i" aria-hidden="true"><use href="#i-wrench"/></svg></span><div class="grow"><b>Caldaia riparata</b><span class="small muted">Gestita da Domilis · nessun costo per te</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="view" id="o-case" aria-label="Case">
+      <div id="lista-case" style="display:grid;gap:14px">
+        <div class="card lst">
+          <div class="photo" style="--c1:#bfe0ff;--c2:#b9a6fb"><div class="tags"><span class="tag">Affittata</span></div></div>
+          <div class="row"><div class="grow"><h3>Bilocale luminoso</h3><p class="small muted">Porta Romana · Giulia R. · 3+2 fino al 2030</p></div><p class="price">1.200 € <small>al mese</small></p></div>
+        </div>
+        <button class="card lst" data-go="o-cand">
+          <div class="photo" style="--c1:#cfe6fb;--c2:#9fd0ff"><div class="tags"><span class="tag brand">In selezione · 3 candidati</span></div></div>
+          <div class="row"><div class="grow"><h3>Monolocale con soppalco</h3><p class="small muted">Isola · online da 4 giorni</p></div><p class="price">1.100 € <small>al mese</small></p></div>
+        </button>
+      </div>
+      <div style="height:64px"></div>
+    </section>
+
+    <section class="view" id="o-cand" aria-label="Candidati">
+      <p class="muted">Monolocale · Isola. Vedi solo persone già verificate da Domilis.</p>
+      <div id="lista-cand" style="display:grid;gap:12px"></div>
+      <div class="card row"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><p class="small muted grow">La garanzia sul canone vale per qualsiasi candidato tu scelga da questa lista.</p></div>
+    </section>
+
+    <!-- INQUILINO -->
+    <section class="view" id="t-esp" aria-label="Esplora">
+      <div class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Milano · tutte le zone</div>
+      <div class="chips" role="group" aria-label="Filtra per locali">
+        <button data-f="0" aria-pressed="true">Tutte</button><button data-f="1" aria-pressed="false">Monolocali</button><button data-f="2" aria-pressed="false">Bilocali</button><button data-f="3" aria-pressed="false">Trilocali e oltre</button>
+      </div>
+      <div id="lista-annunci" style="display:grid;gap:14px"></div>
+    </section>
+
+    <section class="view" id="t-casa" aria-label="Casa mia">
+      <div class="hero">
+        <p>Prossimo canone · 1 maggio</p>
+        <p class="num" data-count="1200">1.200 €</p>
+        <p>Bilocale · Porta Romana</p>
+        <div class="row"><span class="tag glass">Addebito automatico attivo</span><span class="small" style="color:#fff">Deposito: 0 €</span></div>
+      </div>
+      <div class="quick">
+        <button class="press" data-sheet="guasto"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-wrench"/></svg></span>Segnala guasto</button>
+        <button class="press" data-sheet="documenti"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span>Contratto</button>
+        <button class="press" data-go="t-plus"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-spark"/></svg></span>Domilis+</button>
+      </div>
+      <div class="sec"><h2>Il tuo ingresso</h2></div>
+      <div class="card">
+        <ul class="steps">
+          <li><div><b>Verifica completata</b><span class="small muted">Identità e reddito confermati</span></div></li>
+          <li><div><b>Contratto firmato</b><span class="small muted">Firma digitale · 3+2</span></div></li>
+          <li><div><b>Registrato all'Agenzia delle Entrate</b><span class="small muted">Ricevuta nei documenti</span></div></li>
+          <li class="todo"><div><b>Consegna delle chiavi</b><span class="small muted">Sabato 1 maggio, ore 10</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="view" id="t-plus" aria-label="Domilis+">
+      <p class="muted">Servizi per la casa, a scelta. Sono in arrivo: attiva l'avviso per quelli che ti interessano.</p>
+      <div class="card row"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-spark"/></svg></span><div class="grow"><h3 style="font-size:1rem">Pulizie</h3><p class="small muted">Stesso professionista, insieme al canone</p></div><button class="sw" role="switch" aria-checked="false" aria-label="Avvisami per Pulizie" id="sw-pulizie"></button></div>
+      <div class="card row"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-gym"/></svg></span><div class="grow"><h3 style="font-size:1rem">Benessere</h3><p class="small muted">Palestre e studi della tua zona</p></div><button class="sw" role="switch" aria-checked="false" aria-label="Avvisami per Benessere" id="sw-benessere"></button></div>
+      <div class="card row"><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg></span><div class="grow"><h3 style="font-size:1rem">Utenze e internet</h3><p class="small muted">Pronte il giorno dell'ingresso</p></div><button class="sw" role="switch" aria-checked="false" aria-label="Avvisami per Utenze e internet" id="sw-utenze"></button></div>
+    </section>
+
+    <!-- PROFILO, comune -->
+    <section class="view" id="prof" aria-label="Profilo">
+      <div class="card row"><span class="av" style="width:56px;height:56px;font-size:1.1rem">UD</span><div class="grow"><h2 style="font-size:1.15rem">Utente demo</h2><p class="small muted">Identità verificata con SPID</p></div><span class="tag">Verificato</span></div>
+      <div class="sec"><h2>Stai usando l'app come</h2></div>
+      <div class="seg" id="ruolo" data-on="0"><button data-r="owner" aria-pressed="true">Proprietario</button><button data-r="tenant" aria-pressed="false">Inquilino</button></div>
+      <div class="card">
+        <ul class="list">
+          <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span><div class="grow"><b>Documenti e ricevute</b></div><svg class="i muted" aria-hidden="true"><use href="#i-chev"/></svg></li>
+          <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg></span><div class="grow"><b>Conto per accrediti e addebiti</b></div><svg class="i muted" aria-hidden="true"><use href="#i-chev"/></svg></li>
+          <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg></span><div class="grow"><b>Notifiche</b></div><svg class="i muted" aria-hidden="true"><use href="#i-chev"/></svg></li>
+        </ul>
+      </div>
+      <p class="small muted" style="text-align:center">Prototipo dimostrativo: dati, nomi e importi sono esempi.</p>
+    </section>
+
+    <button class="fab" id="fab" data-sheet="nuova"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>Aggiungi casa</button>
+  </main>
+
+  <nav class="tabs" id="tabs" aria-label="Navigazione"></nav>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Dettaglio"></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <div class="splash" id="splash">
+    <span class="logo"><svg aria-hidden="true"><use href="#mark"/></svg></span>
+    <h2>Domilis</h2>
+    <p>Renting made effortless. Come vuoi provare l'app?</p>
+    <div class="choose">
+      <button data-start="owner">Ho una casa da affittare</button>
+      <button data-start="tenant">Cerco casa</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const euro = n => Math.round(n).toLocaleString("it-IT", { useGrouping: "always" }) + " €";
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const icona = (n, extra = "") => `<svg class="i" ${extra} aria-hidden="true"><use href="#i-${n}"/></svg>`;
+
+const TABS = {
+  owner: [["o-home", "Home", "home"], ["o-case", "Case", "build"], ["o-cand", "Candidati", "users"], ["prof", "Profilo", "user"]],
+  tenant: [["t-esp", "Esplora", "search"], ["t-casa", "Casa mia", "key"], ["t-plus", "Domilis+", "spark"], ["prof", "Profilo", "user"]],
+};
+const candidati = [
+  { id: "gr", sigla: "GR", nome: "Giulia R.", lavoro: "Contratto a tempo indeterminato", reddito: "3,4 volte il canone" },
+  { id: "mb", sigla: "MB", nome: "Marco B.", lavoro: "Libero professionista", reddito: "3,1 volte il canone" },
+  { id: "lf", sigla: "LF", nome: "Laura F.", lavoro: "Studentessa con garante", reddito: "Garante: 4 volte il canone" },
+];
+const annunci = [
+  { id: 1, titolo: "Bilocale luminoso", zona: "Porta Romana", canone: 1450, mq: 55, locali: 2, piano: "2° piano", contratto: "3+2", c: ["#bfe0ff", "#b9a6fb"] },
+  { id: 2, titolo: "Monolocale con soppalco", zona: "Isola", canone: 1100, mq: 35, locali: 1, piano: "4° piano", contratto: "Transitorio", c: ["#cfe6fb", "#9fd0ff"] },
+  { id: 3, titolo: "Trilocale con balcone", zona: "NoLo", canone: 1600, mq: 80, locali: 3, piano: "3° piano", contratto: "4+4", c: ["#e2d3fb", "#c2a8fb"] },
+  { id: 4, titolo: "Bilocale vicino al Politecnico", zona: "Città Studi", canone: 1250, mq: 50, locali: 2, piano: "1° piano", contratto: "Studenti", c: ["#d3f0e6", "#9fd0ff"] },
+  { id: 5, titolo: "Monolocale ristrutturato", zona: "Bicocca", canone: 850, mq: 30, locali: 1, piano: "5° piano", contratto: "Studenti", c: ["#cfe6fb", "#d9d4fb"] },
+];
+
+let ruolo = "owner", vista = "", scelto = null;
+const app = $("app"), tabs = $("tabs"), sheet = $("sheet");
+
+function conta(el) {
+  const arrivo = Number(el.dataset.count);
+  if (calm) { el.textContent = euro(arrivo); return; }
+  const t0 = performance.now() + 150;
+  const tick = now => {
+    const k = Math.min(1, Math.max(0, (now - t0) / 1100));
+    el.textContent = euro(arrivo * (1 - Math.pow(1 - k, 4)));
+    if (k < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function vai(id) {
+  const elenco = TABS[ruolo], i = elenco.findIndex(t => t[0] === id), prima = elenco.findIndex(t => t[0] === vista);
+  if (i < 0 || id === vista) return;
+  const nuova = $(id);
+  nuova.style.setProperty("--dir", i >= prima ? 1 : -1);
+  if (vista) $(vista).style.setProperty("--dir", i >= prima ? -1 : 1);
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v === nuova));
+  nuova.scrollTop = 0;
+  vista = id;
+  tabs.style.setProperty("--at", i);
+  tabs.querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-current", k === i));
+  $("titolo").innerHTML = "<span></span>";
+  $("titolo").firstChild.textContent = id === "o-home" ? "Buongiorno" : elenco[i][1];
+  $("fab").classList.toggle("on", id === "o-case");
+  nuova.querySelectorAll("[data-count]").forEach(conta);
+}
+
+function impostaRuolo(r, apri) {
+  ruolo = r; vista = "";
+  tabs.innerHTML = '<span class="ind"></span>' + TABS[r].map(t => `<button data-tab="${t[0]}" aria-current="false">${icona(t[2])}${t[1]}</button>`).join("");
+  const seg = $("ruolo");
+  seg.dataset.on = r === "owner" ? 0 : 1;
+  seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.r === r));
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("on"));
+  vai(apri || TABS[r][0][0]);
+}
+
+let timerAvviso = 0;
+function avviso(testo) {
+  const t = $("toast");
+  t.textContent = testo; t.classList.add("on");
+  clearTimeout(timerAvviso);
+  timerAvviso = setTimeout(() => t.classList.remove("on"), 2400);
+}
+
+function apri(html) { sheet.innerHTML = html; sheet.scrollTop = 0; app.classList.add("sheet-on"); }
+function chiudi() { app.classList.remove("sheet-on"); }
+
+function disegnaCandidati() {
+  $("lista-cand").innerHTML = candidati.map(c => `
+    <button class="card row" data-cand="${c.id}">
+      <span class="av">${c.sigla}</span>
+      <div class="grow"><h3 style="font-size:1rem">${c.nome}</h3><p class="small muted">${c.lavoro}</p></div>
+      ${scelto === c.id ? '<span class="tag brand">Scelta · firma in corso</span>' : '<span class="tag">Verificato</span>'}
+    </button>`).join("");
+}
+function disegnaAnnunci(f = 0) {
+  $("lista-annunci").innerHTML = annunci.filter(a => !f || (f === 3 ? a.locali >= 3 : a.locali === f)).map(a => `
+    <button class="card lst" data-annuncio="${a.id}">
+      <div class="photo" style="--c1:${a.c[0]};--c2:${a.c[1]}"><div class="tags"><span class="tag" style="background:#fff">Verificato</span><span class="tag dark">Zero deposito</span></div></div>
+      <div class="row"><div class="grow"><h3>${a.titolo}</h3><p class="small muted">${a.zona}, Milano · ${a.mq} m²</p></div><p class="price">${euro(a.canone)} <small>al mese</small></p></div>
+    </button>`).join("") || '<p class="muted" style="text-align:center;padding:30px 0">Nessuna casa con questo filtro.</p>';
+}
+
+const PANNELLI = {
+  nuova: () => `
+    <h2>Nuovo annuncio</h2>
+    <label class="field"><span>Dove si trova</span><input type="text" id="n-zona" placeholder="Via e zona, per esempio Navigli" autocomplete="off"></label>
+    <label class="field"><span>Canone mensile: <b id="n-val">1.200 €</b></span><input type="range" id="n-canone" min="500" max="3500" step="50" value="1200"></label>
+    <div class="calc"><span class="small">Tu ricevi ogni mese, garantito</span><span class="num" id="n-netto">1.080 €</span></div>
+    <button class="btn" data-fai="pubblica">Pubblica annuncio</button>
+    <p class="small muted" style="text-align:center">Verifichiamo l'immobile prima di metterlo online.</p>`,
+  problema: () => `
+    <h2>Segnala un problema</h2>
+    <p class="muted">Ci pensiamo noi: sentiamo l'inquilino e, se serve, mandiamo un tecnico.</p>
+    <label class="field"><span>Cosa succede</span><textarea id="p-testo" rows="4" placeholder="Descrivi in poche parole"></textarea></label>
+    <button class="btn" data-fai="invia">Invia a Domilis</button>`,
+  guasto: () => `
+    <h2>Segnala un guasto</h2>
+    <div class="chips" role="group" aria-label="Tipo di guasto"><button aria-pressed="true">Idraulica</button><button aria-pressed="false">Elettricità</button><button aria-pressed="false">Riscaldamento</button><button aria-pressed="false">Altro</button></div>
+    <label class="field"><span>Cosa succede</span><textarea id="g-testo" rows="4" placeholder="Descrivi in poche parole"></textarea></label>
+    <button class="btn" data-fai="invia">Invia a Domilis</button>
+    <p class="small muted" style="text-align:center">Rispondiamo entro un giorno lavorativo.</p>`,
+  documenti: () => `
+    <h2>Documenti</h2>
+    <ul class="list">
+      <li><span class="tile">${icona("doc")}</span><div class="grow"><b>Contratto di locazione 3+2</b><span class="small muted">Firmato digitalmente</span></div>${icona("chev", 'style="color:var(--muted)"')}</li>
+      <li><span class="tile">${icona("doc")}</span><div class="grow"><b>Ricevuta di registrazione</b><span class="small muted">Agenzia delle Entrate</span></div>${icona("chev", 'style="color:var(--muted)"')}</li>
+      <li><span class="tile">${icona("doc")}</span><div class="grow"><b>Verbale di consegna</b><span class="small muted">Con foto dell'immobile</span></div>${icona("chev", 'style="color:var(--muted)"')}</li>
+    </ul>
+    <button class="btn ghost" data-fai="chiudi">Chiudi</button>`,
+  notifiche: () => `
+    <h2>Notifiche</h2>
+    <ul class="list">
+      <li><span class="tile" style="background:var(--good-bg);color:var(--good)">${icona("check")}</span><div class="grow"><b>Accredito ricevuto</b><span class="small muted">1.080 € · canone di aprile</span></div></li>
+      <li><span class="tile">${icona("users")}</span><div class="grow"><b>Nuovo candidato verificato</b><span class="small muted">Monolocale · Isola</span></div></li>
+    </ul>
+    <button class="btn ghost" data-fai="chiudi">Chiudi</button>`,
+  candidato: c => `
+    <div class="row"><span class="av" style="width:56px;height:56px;font-size:1.1rem">${c.sigla}</span><div class="grow"><h2>${c.nome}</h2><p class="small muted">${c.lavoro}</p></div></div>
+    <ul class="checks">
+      <li class="done"><span class="ok">${icona("check")}</span><div class="grow"><b>Identità</b><br><span class="small muted">Verificata con SPID</span></div></li>
+      <li class="done"><span class="ok">${icona("check")}</span><div class="grow"><b>Reddito</b><br><span class="small muted">${c.reddito}</span></div></li>
+      <li class="done"><span class="ok">${icona("check")}</span><div class="grow"><b>Affidabilità nei pagamenti</b><br><span class="small muted">Nessuna segnalazione</span></div></li>
+    </ul>
+    <button class="btn" data-fai="scegli" data-id="${c.id}">Scegli ${c.nome.split(" ")[0]}</button>
+    <button class="btn ghost" data-fai="chiudi">Torna ai candidati</button>`,
+  annuncio: a => `
+    <div class="photo" style="--c1:${a.c[0]};--c2:${a.c[1]}"><div class="tags"><span class="tag" style="background:#fff">Verificato</span><span class="tag dark">Zero deposito</span></div></div>
+    <div class="row" style="align-items:flex-start"><div class="grow"><h2>${a.titolo}</h2><p class="muted">${a.zona}, Milano</p></div><p class="price" style="font-size:1.4rem">${euro(a.canone)} <small>al mese</small></p></div>
+    <ul class="facts"><li>${a.mq} m²</li><li>${a.piano}</li><li>Arredato</li><li>Contratto ${a.contratto}</li></ul>
+    <div class="calc"><span class="small">Per entrare ti serve</span><span class="num">${euro(a.canone)}</span></div>
+    <p class="small muted">Solo il primo canone. Nessun deposito e nessuna commissione di agenzia.</p>
+    <button class="btn" data-fai="candidati">Candidati per questa casa</button>`,
+  verifica: () => `
+    <h2>Candidatura</h2>
+    <ul class="checks" id="verifica">
+      <li><span class="spin"></span><span class="ok">${icona("check")}</span><div class="grow"><b>Identità</b><br><span class="small muted">Accesso con SPID</span></div></li>
+      <li><span class="spin"></span><span class="ok">${icona("check")}</span><div class="grow"><b>Reddito</b><br><span class="small muted">Lettura del conto, con il tuo consenso</span></div></li>
+      <li><span class="spin"></span><span class="ok">${icona("check")}</span><div class="grow"><b>Affidabilità nei pagamenti</b><br><span class="small muted">Controllo nelle banche dati</span></div></li>
+    </ul>
+    <button class="btn" id="v-fine" disabled>Verifica in corso…</button>`,
+  fatto: (titolo, testo) => `
+    <div class="center" style="display:grid;gap:14px;padding:14px 0 4px">
+      <span class="done-mark">${icona("check")}</span>
+      <h2>${titolo}</h2>
+      <p class="muted" style="max-width:30ch">${testo}</p>
+    </div>
+    <button class="btn" data-fai="chiudi">Perfetto</button>`,
+};
+
+function avviaVerifica() {
+  apri(PANNELLI.verifica());
+  const righe = [...document.querySelectorAll("#verifica li")], passo = calm ? 150 : 850;
+  righe.forEach((li, i) => {
+    setTimeout(() => li.classList.add("run"), i * passo);
+    setTimeout(() => { li.classList.remove("run"); li.classList.add("done"); }, (i + 1) * passo);
+  });
+  setTimeout(() => apri(PANNELLI.fatto("Candidatura inviata", "Sei verificato. Il proprietario riceve il tuo profilo e ti rispondiamo entro due giorni.")), righe.length * passo + 500);
+}
+
+// Un solo ascoltatore per tutti i tocchi dell'app
+app.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (e.target === $("scrim")) return chiudi();
+  if (!b) return;
+  if (b.dataset.start) { impostaRuolo(b.dataset.start); $("splash").classList.add("off"); return; }
+  if (b.dataset.tab) return vai(b.dataset.tab);
+  if (b.dataset.go) return vai(b.dataset.go);
+  if (b.dataset.r) { impostaRuolo(b.dataset.r, "prof"); avviso(b.dataset.r === "owner" ? "Ora sei in vista proprietario" : "Ora sei in vista inquilino"); return; }
+  if (b.id === "campanella") return apri(PANNELLI.notifiche());
+  if (b.dataset.sheet) {
+    apri(PANNELLI[b.dataset.sheet]());
+    const r = $("n-canone");
+    if (r) {
+      const calcola = () => { const v = Number(r.value); r.style.setProperty("--p", ((v - 500) / 30) + "%"); $("n-val").textContent = euro(v); $("n-netto").textContent = euro(v * 0.9); };
+      r.addEventListener("input", calcola); calcola();
+    }
+    return;
+  }
+  if (b.dataset.cand) return apri(PANNELLI.candidato(candidati.find(c => c.id === b.dataset.cand)));
+  if (b.dataset.annuncio) return apri(PANNELLI.annuncio(annunci.find(a => a.id === Number(b.dataset.annuncio))));
+  if (b.dataset.f !== undefined) { b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); return disegnaAnnunci(Number(b.dataset.f)); }
+  if (b.parentElement.classList.contains("chips")) { b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); return; }
+  if (b.classList.contains("sw")) { const on = b.getAttribute("aria-checked") !== "true"; b.setAttribute("aria-checked", on); avviso(on ? "Ti avvisiamo appena è disponibile" : "Avviso disattivato"); return; }
+  const fai = b.dataset.fai;
+  if (fai === "chiudi") return chiudi();
+  if (fai === "invia") { chiudi(); return avviso("Segnalazione inviata a Domilis"); }
+  if (fai === "candidati") return avviaVerifica();
+  if (fai === "scegli") {
+    scelto = b.dataset.id; disegnaCandidati();
+    const c = candidati.find(x => x.id === scelto);
+    return apri(PANNELLI.fatto(`Hai scelto ${c.nome.split(" ")[0]}`, "Prepariamo il contratto e lo mandiamo a entrambi per la firma digitale."));
+  }
+  if (fai === "pubblica") {
+    const zona = $("n-zona").value.trim() || "Nuova casa", canone = Number($("n-canone").value);
+    const card = document.createElement("div");
+    card.className = "card lst";
+    card.innerHTML = '<div class="photo" style="--c1:#e2d3fb;--c2:#9fd0ff"><div class="tags"><span class="tag warn">In verifica</span></div></div><div class="row"><div class="grow"><h3></h3><p class="small muted">Online dopo il controllo di Domilis</p></div><p class="price"></p></div>';
+    card.querySelector("h3").textContent = zona;
+    card.querySelector(".price").innerHTML = euro(canone) + " <small>al mese</small>";
+    $("lista-case").prepend(card);
+    apri(PANNELLI.fatto("Annuncio ricevuto", "Lo verifichiamo e lo mettiamo online. Ti avvisiamo al primo candidato."));
+    if (vista !== "o-case") vai("o-case");
+  }
+});
+addEventListener("keydown", e => { if (e.key === "Escape") chiudi(); });
+
+disegnaCandidati();
+disegnaAnnunci();
+impostaRuolo("owner");
+</script>
+</body>
+</html>
